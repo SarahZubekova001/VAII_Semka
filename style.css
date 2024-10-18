@@ -1,0 +1,36 @@
+.flex-container {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.winter{
+    background-image: url("img/winter.jpg");
+
+}
+.summer{
+    background-image: url("img/summer.jpg");
+}
+.restaurants{
+    background-image: url("img/restaurants.jpg");
+}
+
+.wellness{
+    background-image: url("img/wellness.jpg");
+}
+
+.contain{
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    padding: 5px;
+    width: 300px;
+    height: 400px;
+    margin-top: 10px;
+}
+
+
