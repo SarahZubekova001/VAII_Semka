@@ -1,36 +1,55 @@
-.flex-container {
+.category-list {
     display: flex;
     flex-flow: row wrap;
     justify-content: space-around;
-
     padding: 0;
     margin: 0;
     list-style: none;
 }
 
-.winter{
-    background-image: url("img/winter.jpg");
-
-}
-.summer{
-    background-image: url("img/summer.jpg");
-}
-.restaurants{
-    background-image: url("img/restaurants.jpg");
-}
-
-.wellness{
-    background-image: url("img/wellness.jpg");
-}
-
-.contain{
+.image-box {
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    padding: 5px;
     width: 300px;
     height: 400px;
     margin-top: 10px;
+    position: relative; /* Potrebné pre absolútne umiestnenie textu */
 }
 
+.season-winter {
+    background-image: url("img/winter.jpg");
+}
+.season-summer {
+    background-image: url("img/summer.jpg");
+}
+.category-restaurants {
+    background-image: url("img/restaurants.jpg");
+}
+.category-wellness {
+    background-image: url("img/wellness.jpg");
+}
 
+.category-sportW {
+    background-image: url("img/sportW.jpg");
+}
+
+.category-activity {
+    background-image: url("img/activity.jpg");
+}
+
+.category-list a {
+    color: white;
+    text-align: center;
+    font-family: sans-serif;
+    font-weight: bolder;
+    font-size: 25px;
+    letter-spacing: 4px;
+    background-color: rgba(192, 192, 192, 0.651); /* Polopriehľadné pozadie textu */
+    text-decoration: none;
+    position: absolute; /* Absolútne pozicovanie pre umiestnenie nad obrázkom */
+    bottom: 0; /* Zarovná text na spodok */
+    width: 100%; /* Zabezpečí, že text je cez celú šírku obrázka */
+    padding: 10px 0; /* Priestor okolo textu */
+    box-sizing: border-box; /* Zabezpečí správne vnútorné odsadenie */
+}
