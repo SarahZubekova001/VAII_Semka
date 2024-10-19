@@ -1,0 +1,19 @@
+body {
+    background-color: #f8f9fa;
+    font-family: Arial, sans-serif;
+}
+
+zuberec{
+    background-image: url("img/zuberec.jpg");
+}
+
+.image-box {
+    background-repeat: no-repeat;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    background-size: cover;
+    background-position: center;
+    width: 85%; /* Zabezpečí, že obrázok zaberá 100% šírky */
+    height: 300px;
+    margin-bottom: 20px;
+}
