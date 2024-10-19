@@ -3,28 +3,21 @@ body {
     font-family: Arial, sans-serif;
 }
 
-h1 {
-    color: #333;
-}
-
-.ski-resort {
-    border: 1px solid #ddd;
-    padding: 15px;
-    border-radius: 8px;
-    background-color: #fff;
+.image-box {
+    background-repeat: no-repeat;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    background-size: cover;
+    background-position: center;
+    width: 85%; /* Zabezpečí, že obrázok zaberá 100% šírky */
+    height: 300px;
     margin-bottom: 20px;
 }
 
-.ski-resort img {
-    border-radius: 8px;
-    width: 100%;
-    height: auto;
-    object-fit: cover;
+.spalena {
+    background-image: url("../img/spalena.jpg");
 }
 
-.ski-resort h3 {
-    font-size: 20px;
-    font-weight: bold;
-    color: #0056b3;
+.janovky {
+    background-image: url("../img/janovky.jpg");
 }
