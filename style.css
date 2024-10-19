@@ -1,3 +1,7 @@
+body {
+    background-color: #f8f9fa;
+    font-family: Arial, sans-serif;
+}
 .category-list {
     display: flex;
     flex-flow: row wrap;
@@ -9,6 +13,8 @@
 
 .image-box {
     background-repeat: no-repeat;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
     background-size: cover;
     background-position: center;
     width: 300px;
@@ -50,6 +56,7 @@
     position: absolute; /* Absolútne pozicovanie pre umiestnenie nad obrázkom */
     bottom: 0; /* Zarovná text na spodok */
     width: 100%; /* Zabezpečí, že text je cez celú šírku obrázka */
-    padding: 10px 0; /* Priestor okolo textu */
+    padding: 5px 0; /* Priestor okolo textu */
     box-sizing: border-box; /* Zabezpečí správne vnútorné odsadenie */
+    margin-bottom: 10px;
 }
