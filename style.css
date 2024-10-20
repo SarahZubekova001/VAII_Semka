@@ -19,8 +19,9 @@ body {
     background-position: center;
     width: 300px;
     height: 400px;
-    margin-top: 10px;
+    margin-top: 60px;
     position: relative; /* Potrebné pre absolútne umiestnenie textu */
+
 }
 
 .season-winter {
@@ -51,12 +52,47 @@ body {
     font-weight: bolder;
     font-size: 25px;
     letter-spacing: 4px;
-    background-color: rgba(192, 192, 192, 0.651); /* Polopriehľadné pozadie textu */
+    background-color: rgba(192, 192, 192, 0.651);
     text-decoration: none;
-    position: absolute; /* Absolútne pozicovanie pre umiestnenie nad obrázkom */
-    bottom: 0; /* Zarovná text na spodok */
-    width: 100%; /* Zabezpečí, že text je cez celú šírku obrázka */
-    padding: 5px 0; /* Priestor okolo textu */
-    box-sizing: border-box; /* Zabezpečí správne vnútorné odsadenie */
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 5px 0;
+    box-sizing: border-box;
     margin-bottom: 10px;
+}
+
+.zuberec {
+    background-image: url("img/zuberec.jpg");
+}
+
+.main-image {
+    position: relative; /* Potrebné pre správne zobrazenie overlay a textu */
+    background-repeat: no-repeat;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    border-radius: 15px;
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    height: 400px;
+    margin-bottom: 20px;
+
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Čierna farba s 50% priehľadnosťou */
+    border-radius: 15px; /* Zachováme rovnaké zaoblenie ako obrázok */
+}
+.overlay-text {
+    font-family: "Times New Roman", Times, serif;
+    position: absolute;
+    top: 10%;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+    font-size: 20px;
 }
