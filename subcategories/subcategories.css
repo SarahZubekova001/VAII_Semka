@@ -9,7 +9,7 @@ body {
     border-radius: 15px;
     background-size: cover;
     background-position: center;
-    width: 85%; /* Zabezpečí, že obrázok zaberá 100% šírky */
+    width: 85%;
     height: 300px;
     margin-bottom: 20px;
 }
