@@ -18,34 +18,34 @@ body, html {
     justify-content: center;
     position: relative;
     overflow: hidden; /* Aby zväčšenie nepresahovalo sekciu */
-    cursor: pointer; /* Indikátor klikateľnosti */
+    cursor: pointer;
     transition: transform 0.3s ease; /* Hladký efekt zväčšenia */
     text-decoration: none; /* Odstránenie podčiarknutia textu */
-    color: white; /* Farba textu */
+    color: white;
 
 }
 
 .section:hover {
-    transform: scale(1.1); /* Zväčšenie pri prechode myšou */
+    transform: scale(1.1);
 }
 
 .section h2 {
     position: relative;
     z-index: 2; /* Text nad prekrytím */
-    margin: 0; /* Odstránenie predvolených marginov */
-    padding: 10px; /* Priestor okolo textu */
+    margin: 0;
+    padding: 10px;
     text-align: center;
-    font-size: 2em; /* Zvýšenie veľkosti písma */
+    font-size: 2em;
 }
 
 .section .text-overlay {
     position: absolute;
-    top: 50%; /* Umiestnenie pásu vertikálne do stredu */
+    top: 50%;
     left: 0;
     transform: translateY(-50%); /* Korekcia na presné zarovnanie stredu */
-    width: 100%; /* Tmavý pás cez celú šírku obrázka */
-    background: rgba(0, 0, 0, 0.6); /* Tmavé prekrytie */
-    height: 50px; /* Výška pásu */
+    width: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    height: 50px;
     z-index: 1; /* Prekrytie je pod textom, ale nad obrázkom */
 }
 
@@ -80,7 +80,7 @@ body, html {
 }
 
 #sport {
-    background: url('../img/sportW.jpg') no-repeat center center;
+    background: url('../img/sport.jpg') no-repeat center center;
     background-size: cover;
 }
 
