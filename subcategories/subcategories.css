@@ -9,9 +9,14 @@ body {
     border-radius: 15px;
     background-size: cover;
     background-position: center;
-    width: 85%;
+    width: 100%;
     height: 300px;
-    margin-bottom: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.image-box:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 .spalena {
@@ -20,4 +25,18 @@ body {
 
 .janovky {
     background-image: url("../img/janovky.jpg");
+}
+
+@media (max-width: 768px) {
+    .image-box {
+        height: 200px; /* Nižšia výška pre mobilné zariadenia */
+    }
+
+    h3 {
+        font-size: 1.5rem; /* Menšie nadpisy pre menšie obrazovky */
+    }
+
+    p {
+        font-size: 0.9rem; /* Zmenšený text */
+    }
 }

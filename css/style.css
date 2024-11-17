@@ -8,21 +8,21 @@ body, html {
 .container {
     display: flex;
     flex-direction: column;
+    padding-top: 20px;
 }
 
 .section {
-    height: 450px;
+    height: 200px;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     overflow: hidden; /* Aby zväčšenie nepresahovalo sekciu */
-    cursor: pointer;
+    cursor: pointer; /* Indikátor klikateľnosti */
     transition: transform 0.3s ease; /* Hladký efekt zväčšenia */
-    text-decoration: none;
-    margin: 15px;
-    color: white;
-    box-sizing: border-box;
+    text-decoration: none; /* Odstránenie podčiarknutia textu */
+    color: white; /* Farba textu */
+
 }
 
 .section:hover {
@@ -33,9 +33,9 @@ body, html {
     position: relative;
     z-index: 2; /* Text nad prekrytím */
     margin: 0; /* Odstránenie predvolených marginov */
-    padding: 10px;
+    padding: 10px; /* Priestor okolo textu */
     text-align: center;
-    font-size: 2em;
+    font-size: 2em; /* Zvýšenie veľkosti písma */
 }
 
 .section .text-overlay {
@@ -43,9 +43,9 @@ body, html {
     top: 50%; /* Umiestnenie pásu vertikálne do stredu */
     left: 0;
     transform: translateY(-50%); /* Korekcia na presné zarovnanie stredu */
-    width: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    height: 50px;
+    width: 100%; /* Tmavý pás cez celú šírku obrázka */
+    background: rgba(0, 0, 0, 0.6); /* Tmavé prekrytie */
+    height: 50px; /* Výška pásu */
     z-index: 1; /* Prekrytie je pod textom, ale nad obrázkom */
 }
 
@@ -68,6 +68,7 @@ body, html {
     background: url('../img/zuberec.jpg') no-repeat center center;
     background-size: cover;
 }
+
 #aktivity {
     background: url('../img/activity.jpg') no-repeat center center;
     background-size: cover;
@@ -84,23 +85,21 @@ body, html {
 }
 
 /* Mobile styles */
-@media (max-width: 768px) {
+@media (max-width: 990px) {
     .container {
         flex-direction: column;
     }
-    .section {
-        height: 150px;
-    }
 }
 
-@media (min-width: 769px) {
+@media (min-width: 991px) {
     .container {
         flex-direction: row;
         flex-wrap: wrap;
+        gap: 35px;
     }
 
     .section {
-        width: 47% ;
-        height: 350px;
+        width: 48% ;
+        height: 300px;
     }
 }
