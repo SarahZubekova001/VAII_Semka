@@ -1,0 +1,106 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.section {
+    height: 450px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden; /* Aby zväčšenie nepresahovalo sekciu */
+    cursor: pointer;
+    transition: transform 0.3s ease; /* Hladký efekt zväčšenia */
+    text-decoration: none;
+    margin: 15px;
+    color: white;
+    box-sizing: border-box;
+}
+
+.section:hover {
+    transform: scale(1.1); /* Zväčšenie pri prechode myšou */
+}
+
+.section h2 {
+    position: relative;
+    z-index: 2; /* Text nad prekrytím */
+    margin: 0; /* Odstránenie predvolených marginov */
+    padding: 10px;
+    text-align: center;
+    font-size: 2em;
+}
+
+.section .text-overlay {
+    position: absolute;
+    top: 50%; /* Umiestnenie pásu vertikálne do stredu */
+    left: 0;
+    transform: translateY(-50%); /* Korekcia na presné zarovnanie stredu */
+    width: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    height: 50px;
+    z-index: 1; /* Prekrytie je pod textom, ale nad obrázkom */
+}
+
+#summer {
+    background: url('../img/summer.jpg') no-repeat center center;
+    background-size: cover;
+}
+
+#winter {
+    background: url('../img/winter.jpg') no-repeat center center;
+    background-size: cover;
+}
+
+#food {
+    background: url('../img/restaurants.jpg') no-repeat center center;
+    background-size: cover;
+}
+
+#info {
+    background: url('../img/zuberec.jpg') no-repeat center center;
+    background-size: cover;
+}
+#aktivity {
+    background: url('../img/activity.jpg') no-repeat center center;
+    background-size: cover;
+}
+
+#relax {
+    background: url('../img/relax.jpg') no-repeat center center;
+    background-size: cover;
+}
+
+#sport {
+    background: url('../img/sportW.jpg') no-repeat center center;
+    background-size: cover;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+    .section {
+        height: 150px;
+    }
+}
+
+@media (min-width: 769px) {
+    .container {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .section {
+        width: 47% ;
+        height: 350px;
+    }
+}
