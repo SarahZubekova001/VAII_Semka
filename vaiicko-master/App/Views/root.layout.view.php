@@ -14,7 +14,7 @@
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
             crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="../../public/css/style.css" >
+    <link rel="stylesheet" href="../../public/css/style.css">
     <script src="../../public/js/script.js"></script>
 </head>
 <body>
@@ -34,23 +34,17 @@
                     <a class="nav-link active" href="<?= $link->url('home.summer') ?>">Leto</a>
                     <a class="nav-link active" href="<?= $link->url('home.restaurants') ?>">Reštaurácie</a>
                     <a class="nav-link active" href="<?= $link->url('home.info') ?>">Info</a>
-                    <!-- Prihlásenie pre malé obrazovky -->
-                    <a class="nav-link d-lg-none" href="<?= $link->url('auth.login') ?>">Prihlásenie</a>
                 </div>
             </div>
         </div>
     </nav>
-    <!-- Prihlásenie pre veľké obrazovky -->
+    <!-- Prihlásenie alebo Odhlásenie -->
     <a class="nav-link d-none d-lg-block position-absolute"
-       href="<?= $link->url('auth.login') ?>"
+       href="<?= $auth->isLogged() ? $link->url('auth.logout') : $link->url('auth.login') ?>"
        style=" right: 20px;">
-        Prihlásenie
+        <?= $auth->isLogged() ? 'Odhlásenie' : 'Prihlásenie' ?>
     </a>
 </nav>
-
-
-
-
 
 <div class="container-fluid mt-3">
     <div class="web-content">

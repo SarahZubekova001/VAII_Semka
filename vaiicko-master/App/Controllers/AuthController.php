@@ -34,7 +34,7 @@ class AuthController extends AControllerBase
         if (isset($formData['submit'])) {
             $logged = $this->app->getAuth()->login($formData['login'], $formData['password']);
             if ($logged) {
-                return $this->redirect($this->url("admin.index"));
+                return $this->redirect($this->url("home.index")); // Zostaň na aktuálnej stránke po prihlásení
             }
         }
 
@@ -44,11 +44,11 @@ class AuthController extends AControllerBase
 
     /**
      * Logout a user
-     * @return ViewResponse
+     * @return Response
      */
     public function logout(): Response
     {
         $this->app->getAuth()->logout();
-        return $this->html();
+        return $this->redirect($this->url("home.index")); // Vráť na domovskú stránku
     }
 }
