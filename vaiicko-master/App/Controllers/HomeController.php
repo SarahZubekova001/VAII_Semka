@@ -4,12 +4,17 @@ namespace App\Controllers;
 
 use App\Core\AControllerBase;
 use App\Core\Responses\Response;
+use App\Models\Restaurant;
 
 class HomeController extends AControllerBase
 {
     public function index(): Response
     {
-        return $this->html();
+        return $this->html(
+            [
+                'restaurants' => Restaurant::getAll()
+            ]
+        );
     }
 
     public function info(): Response
@@ -23,11 +28,6 @@ class HomeController extends AControllerBase
     }
 
     public function winter(): Response
-    {
-        return $this->html();
-    }
-
-    public function restaurants(): Response
     {
         return $this->html();
     }
@@ -50,5 +50,7 @@ class HomeController extends AControllerBase
     {
         return $this->html();
     }
+
+
 
 }

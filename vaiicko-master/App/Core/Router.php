@@ -61,4 +61,9 @@ class Router
     {
         return $this->controller;
     }
+    public function getControllerInstance(string $controllerName)
+    {
+        $fullControllerName = 'App\Controllers\\' . $controllerName;
+        return new $fullControllerName();
+    }
 }

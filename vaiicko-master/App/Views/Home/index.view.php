@@ -25,7 +25,7 @@
         <div class="text-overlay"></div>
         <h2>ZIMA U NÁS</h2>
     </a>
-    <a href="<?= $link->url('home.restaurants') ?>" class="section" id="food">
+    <a href="<?= $link->url('restaurant.restaurants') ?>" class="section" id="food">
         <div class="text-overlay"></div>
         <h2>REŠTAURACIE</h2>
     </a>

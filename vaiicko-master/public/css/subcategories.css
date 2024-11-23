@@ -27,20 +27,50 @@ body {
     margin-bottom: 0;
 }
 
+.spalena {
+    background-image: url("/public/img/spalena.jpg");
+}
+
+.janovky {
+    background-image: url("../img/janovky.jpg");
+}
+
+.jaskyna {
+    background-image: url("../img/jaskyna.jpg");
+}
+
+.muzeum {
+    background-image: url("../img/MOD.jpg");
+}
+
+.rozhladna {
+    background-image: url("../img/rozhladna.jpg");
+}
+
+.oravice {
+    background-image: url("../img/oravice.jpg");
+}
+
+.josu{
+    background-image: url("../img/josu.jpg");
+}
+
+.vila {
+    background-image: url("../img/vila.jpg");
+}
+
 .kycer {
-    background-image: url("../../public/img/kycee.jpg");
+    background-image: url("../img/kycee.jpg");
 }
-
 .oravskaIzba {
-    background-image: url("../../public/img/oravskaizba.jpg");
+    background-image: url("../img/oravskaizba.jpg");
 }
 
-.josuu {
-    background-image: url("../../public/img/josuu.jpg");
+.josuu{
+    background-image: url("../img/josuu.jpg");
 }
-
-.uno {
-    background-image: url("../../public/img/uno.jpeg");
+.uno{
+    background-image: url("../img/uno.jpeg");
 }
 
 @media (max-width: 768px) {

@@ -14,7 +14,7 @@
     <div class="row g-4">
         <!-- Rozhladna -->
         <div class="col-lg-6 col-md-6 col-12">
-            <a href="subcategories/spalena.html" class="image-box rozhladna d-block"></a>
+            <a href="" class="image-box rozhladna d-block"></a>
             <h3 class="mt-3 text-center">Rozhladna Machy</h3>
         </div>
 

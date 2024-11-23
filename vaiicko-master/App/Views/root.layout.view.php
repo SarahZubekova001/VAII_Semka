@@ -44,6 +44,7 @@
        style=" right: 20px;">
         <?= $auth->isLogged() ? 'Odhlásenie' : 'Prihlásenie' ?>
     </a>
+
 </nav>
 
 <div class="container-fluid mt-3">
