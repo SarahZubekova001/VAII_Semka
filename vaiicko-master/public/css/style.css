@@ -1,0 +1,105 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+}
+
+.section {
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden; /* Aby zväčšenie nepresahovalo sekciu */
+    cursor: pointer;
+    transition: transform 0.3s ease; /* Hladký efekt zväčšenia */
+    text-decoration: none; /* Odstránenie podčiarknutia textu */
+    color: white;
+
+}
+
+.section:hover {
+    transform: scale(1.1);
+}
+
+.section h2 {
+    position: relative;
+    z-index: 2; /* Text nad prekrytím */
+    margin: 0;
+    padding: 10px;
+    text-align: center;
+    font-size: 2em;
+}
+
+.section .text-overlay {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%); /* Korekcia na presné zarovnanie stredu */
+    width: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    height: 50px;
+    z-index: 1; /* Prekrytie je pod textom, ale nad obrázkom */
+}
+
+#summer {
+    background: url("../img/summer.jpg") no-repeat center center;
+    background-size: cover;
+}
+
+#winter {
+    background: url('../img/winter.jpg') no-repeat center center;
+    background-size: cover;
+}
+
+#food {
+    background: url('../img/restaurants.jpg') no-repeat center center;
+    background-size: cover;
+}
+
+#info {
+    background: url('../img/zuberec.jpg') no-repeat center center;
+    background-size: cover;
+}
+
+#aktivity {
+    background: url('../img/activity.jpg') no-repeat center center;
+    background-size: cover;
+}
+
+#relax {
+    background: url('../img/relax.jpg') no-repeat center center;
+    background-size: cover;
+}
+
+#sport {
+    background: url('../img/sport.jpg') no-repeat center center;
+    background-size: cover;
+}
+
+/* Mobile styles */
+@media (max-width: 990px) {
+    .container {
+        flex-direction: column;
+    }
+}
+
+@media (min-width: 991px) {
+    .container {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 35px;
+    }
+
+    .section {
+        width: 48% ;
+        height: 300px;
+    }
+}

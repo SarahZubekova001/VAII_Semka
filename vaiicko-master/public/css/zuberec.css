@@ -1,0 +1,91 @@
+/* Celkové nastavenia */
+body {
+    background-color: #f8f9fa;
+    font-family: Arial, sans-serif;
+}
+
+/* Hero sekcia */
+.hero {
+    background: url('../img/zuberec.jpg') no-repeat center center;
+    background-size: cover;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.hero h1 {
+    font-size: 3rem;
+}
+
+/* Obsahová sekcia */
+.content-section {
+    padding: 40px 20px;
+}
+
+/* Obrázky definované cez CSS */
+.image-box {
+    background-position: center;
+    border-radius: 15px; /* Zaoblené rohy */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Jemný tieň */
+}
+
+/* Nastavenie pre druhý obrázok */
+#zuberec {
+    height: 470px;
+    background: url('../img/zuberec2.jpg') no-repeat center center;
+    background-size: contain; /* Zabezpečí, že sa zobrazí celý obrázok */
+    background-color: #e3e3e3; /* Záložná farba na pozadí */
+}
+
+/* Obrázky pre inštitúcie */
+.institution-box {
+    height: 230px;
+    width: 100%; /* Obrázky budú zaberať celý stĺpec */
+    background-size: contain !important; /* Zabezpečí, že sa zobrazia celé obrázky bez orezania */
+    background-repeat: no-repeat; /* Zabráni opakovaniu obrázkov */
+    background-color: #e3e3e3; /* Pridaná záložná farba pre obrázky */
+    margin-bottom: 20px;
+}
+
+#kostol {
+    background: url('../img/kostol.jpg') no-repeat center center;
+}
+
+#info-center {
+    background: url('../img/info_center.jpg') no-repeat center center;
+}
+
+#obecny-urad {
+    background: url('../img/obecny_urad.jpg') no-repeat center center;
+}
+
+/* Textové boxy */
+h4 {
+    margin-top: 10px;
+    font-size: 1.25rem;
+    color: #333;
+}
+
+p {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
+}
+
+/* Responzívne úpravy */
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .institution-box {
+        height: 200px; /* Zmenšenie výšky obrázkov na mobiloch */
+    }
+
+    #zuberec {
+        height: 250px; /* Zmenšenie výšky na mobiloch */
+    }
+}
