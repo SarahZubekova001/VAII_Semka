@@ -46,6 +46,9 @@ class HomeController extends AControllerBase
     {
         return $this->html();
     }
-
+    public function spalena(): Response
+    {
+        return $this->html();
+    }
 
 }
