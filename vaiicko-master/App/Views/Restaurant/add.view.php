@@ -19,8 +19,8 @@
             <input type="text" class="form-control" id="address" name="address" required>
         </div>
         <div class="mb-3">
-            <label for="hours" class="form-label">Otváracie hodiny</label>
-            <textarea class="form-control" id="hours" name="hours" rows="3" required></textarea>
+            <label for="opening_hours" class="form-label">Otváracie hodiny</label>
+            <textarea class="form-control" id="opening_hours" name="opening_hours" rows="3" required></textarea>
         </div>
         <div class="mb-3">
             <label for="image" class="form-label">Obrázok</label>

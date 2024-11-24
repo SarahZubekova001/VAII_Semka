@@ -137,19 +137,26 @@ abstract class Model implements \JsonSerializable
      */
     public function save(): void
     {
+        var_dump("Entering save() method"); // Debug
         self::connect();
         try {
             $data = array_fill_keys(static::getDbColumns(), null);
             foreach ($data as $key => &$item) {
                 $item = isset($this->$key) ? $this->$key : null;
             }
+
             if ($this->_dbId == null) {
                 $arrColumns = array_map(fn($item) => (':' . $item), array_keys($data));
                 $columns = '`' . implode('`,`', array_keys($data)) . "`";
                 $params = implode(',', $arrColumns);
                 $sql = "INSERT INTO `" . static::getTableName() . "` ($columns) VALUES ($params)";
+
+                var_dump("Generated SQL: ", $sql); // Debug
+                var_dump("Data to bind: ", $data); // Debug
+
                 $stmt = self::$connection->prepare($sql);
                 $stmt->execute($data);
+
                 if (!isset($this->{static::getPkColumnName()})) {
                     $this->{static::getPkColumnName()} = self::$connection->lastInsertId();
                     $this->_dbId = $this->{static::getPkColumnName()};
@@ -157,8 +164,11 @@ abstract class Model implements \JsonSerializable
             } else {
                 $arrColumns = array_map(fn($item) => ("`" . $item . '`=:' . $item), array_keys($data));
                 $columns = implode(',', $arrColumns);
-                $sql = "UPDATE `" . static::getTableName() . "` SET $columns WHERE `" . static::getPkColumnName() .
-                    "`=:__pk";
+                $sql = "UPDATE `" . static::getTableName() . "` SET $columns WHERE `" . static::getPkColumnName() . "`=:__pk";
+
+                var_dump("Generated SQL for UPDATE: ", $sql); // Debug
+                var_dump("Data to bind for UPDATE: ", $data); // Debug
+
                 $stmt = self::$connection->prepare($sql);
                 $data["__pk"] = $this->_dbId;
                 $stmt->execute($data);
@@ -167,6 +177,7 @@ abstract class Model implements \JsonSerializable
             throw new \Exception('Query failed: ' . $e->getMessage(), 0, $e);
         }
     }
+
 
     /**
      * Get array of column names from the associated model table

@@ -11,6 +11,8 @@ class Restaurant extends Model
     protected ?string $image_path;
     protected ?string $address;
     protected ?string $opening_hours;
+    protected ?string $author;
+    protected static string $tableName = 'restaurants';
 
     public function getId(): ?int
     {
@@ -56,6 +58,16 @@ class Restaurant extends Model
     public function setOpeningHours(string $opening_hours): void
     {
         $this->opening_hours = $opening_hours;
+    }
+
+    public function getAuthor(): ?string
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(string $author): void
+    {
+        $this->author = $author;
     }
 
 }

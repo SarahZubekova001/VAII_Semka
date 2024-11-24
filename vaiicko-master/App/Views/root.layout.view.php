@@ -32,7 +32,7 @@
                 <div class="navbar-nav">
                     <a class="nav-link active" href="<?= $link->url('home.winter') ?>">Zima</a>
                     <a class="nav-link active" href="<?= $link->url('home.summer') ?>">Leto</a>
-                    <a class="nav-link active" href="<?= $link->url('home.restaurants') ?>">Reštaurácie</a>
+                    <a class="nav-link active" href="<?= $link->url('restaurant.restaurants') ?>">Reštaurácie</a>
                     <a class="nav-link active" href="<?= $link->url('home.info') ?>">Info</a>
                 </div>
             </div>

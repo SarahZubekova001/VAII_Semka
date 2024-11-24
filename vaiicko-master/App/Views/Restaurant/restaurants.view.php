@@ -46,14 +46,19 @@
 <div class="container mt-4">
     <h1 class="text-center mb-5">Reštaurácie</h1>
     <div class="row">
-        <?php if (!empty($restaurants)): ?>
+        <?php if (isset($restaurants) && !empty($restaurants)): ?>
             <?php foreach ($restaurants as $restaurant): ?>
                 <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
                     <div class="card">
-                        <img src="<?= htmlspecialchars($restaurant->getImagePath()) ?>" class="card-img-top" alt="<?= htmlspecialchars($restaurant->getName()) ?>">
+                        <img src="public/uploads/<?= htmlspecialchars($restaurant->getImagePath()) ?>"
+                             class="card-img-top"
+                             alt="<?= htmlspecialchars($restaurant->getName()) ?>">
                         <div class="card-body">
                             <h5 class="card-title"><?= htmlspecialchars($restaurant->getName()) ?></h5>
-                            <a href="<?= $link->url('restaurant.detail', ['id' => $restaurant->getId()]) ?>" class="btn btn-primary">Viac info</a>
+                            <a href="<?= $this->url('restaurant.detail', ['id' => $restaurant->getId()]) ?>"
+                               class="btn btn-primary">
+                                Viac info
+                            </a>
                         </div>
                     </div>
                 </div>
