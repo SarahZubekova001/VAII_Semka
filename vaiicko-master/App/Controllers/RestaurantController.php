@@ -30,47 +30,34 @@ class RestaurantController extends AControllerBase
         $id = $this->request()->getValue('id');
         $oldFileName = "";
 
-        // Kontrola, či je ID nastavené
         if ($id > 0) {
             $restaurant = Restaurant::getOne($id);
             $oldFileName = $restaurant->getImagePath();
         } else {
             $restaurant = new Restaurant();
-            var_dump("Creating new Restaurant object"); // Debug
             $restaurant->setAuthor($this->app->getAuth()->getLoggedUserName());
         }
 
-        // Nastavujeme hodnoty do objektu
         $restaurant->setName($this->request()->getValue('name'));
         $restaurant->setAddress($this->request()->getValue('address'));
         $restaurant->setOpeningHours($this->request()->getValue('opening_hours'));
         $restaurant->setImagePath($this->request()->getFiles()['image']['name']);
 
-        var_dump("Restaurant object before validation", $restaurant); // Debug
-
-        // Validácia údajov
         $formErrors = $this->formErrors();
 
         if (count($formErrors) > 0) {
-            var_dump("Form errors", $formErrors); // Debug
             return $this->html(['errors' => $formErrors, 'restaurants' => $restaurant], 'add');
         } else {
             if ($oldFileName != "") {
-                var_dump("Deleting old file: " . $oldFileName); // Debug
                 FileStorage::deleteFile($oldFileName);
             }
-            // Uloženie nového súboru
             $newFileName = FileStorage::saveFile($this->request()->getFiles()['image']);
             $restaurant->setImagePath($newFileName);
 
-            var_dump("Before saving restaurant to DB", $restaurant); // Debug
 
-            // Pokus o uloženie do DB
             try {
                 $restaurant->save();
-                var_dump("Restaurant saved successfully"); // Debug
             } catch (\Exception $e) {
-                var_dump("Error while saving to DB", $e->getMessage()); // Debug
                 throw $e;
             }
 
@@ -99,22 +86,6 @@ class RestaurantController extends AControllerBase
         }
         return $errors;
     }
-
-
-
-
-//        $restaurant = new Restaurant();
-//        $restaurant->setName($this->request()->getValue('name'));
-//        $restaurant->setAddress($this->request()->getValue('address'));
-//        $restaurant->setOpeningHours($this->request()->getValue('opening_hours'));
-//
-//        if ($this->request()->getFiles()['image']['name']) {
-//            $filePath = \App\Helpers\FileStorage::saveFile($this->request()->getFiles()['image']);
-//            $restaurant->setImagePath($filePath);
-//        }
-//
-//        $restaurant->save();
-//        return $this->redirect($this->url('restaurant.index'));
 
 
     public function detail(): Response

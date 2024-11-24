@@ -137,7 +137,6 @@ abstract class Model implements \JsonSerializable
      */
     public function save(): void
     {
-        var_dump("Entering save() method"); // Debug
         self::connect();
         try {
             $data = array_fill_keys(static::getDbColumns(), null);
@@ -150,10 +149,6 @@ abstract class Model implements \JsonSerializable
                 $columns = '`' . implode('`,`', array_keys($data)) . "`";
                 $params = implode(',', $arrColumns);
                 $sql = "INSERT INTO `" . static::getTableName() . "` ($columns) VALUES ($params)";
-
-                var_dump("Generated SQL: ", $sql); // Debug
-                var_dump("Data to bind: ", $data); // Debug
-
                 $stmt = self::$connection->prepare($sql);
                 $stmt->execute($data);
 
@@ -165,10 +160,6 @@ abstract class Model implements \JsonSerializable
                 $arrColumns = array_map(fn($item) => ("`" . $item . '`=:' . $item), array_keys($data));
                 $columns = implode(',', $arrColumns);
                 $sql = "UPDATE `" . static::getTableName() . "` SET $columns WHERE `" . static::getPkColumnName() . "`=:__pk";
-
-                var_dump("Generated SQL for UPDATE: ", $sql); // Debug
-                var_dump("Data to bind for UPDATE: ", $data); // Debug
-
                 $stmt = self::$connection->prepare($sql);
                 $data["__pk"] = $this->_dbId;
                 $stmt->execute($data);

@@ -12,9 +12,6 @@
 </head>
 <body>
 
-
-
-
 <div class="container">
     <a href="<?= $link->url('home.summer') ?>" class="section" id="summer">
         <div class="text-overlay"></div>
