@@ -54,7 +54,9 @@ abstract class Model implements \JsonSerializable
 
             $stmt = self::$connection->prepare($sql);
             $stmt->execute($whereParams);
+
             $models = $stmt->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, static::class);
+
             foreach ($models as $model) {
                 $model->_dbId = $model->{static::getPkColumnName()};
             }
@@ -63,6 +65,7 @@ abstract class Model implements \JsonSerializable
             throw new \Exception('Query failed: ' . $e->getMessage(), 0, $e);
         }
     }
+
 
     /**
      * Connect to DB

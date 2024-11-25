@@ -59,19 +59,19 @@ body {
     background-image: url("../img/vila.jpg");
 }
 
-.kycer {
-    background-image: url("../img/kycee.jpg");
-}
-.oravskaIzba {
-    background-image: url("../img/oravskaizba.jpg");
-}
+/*.kycer {*/
+/*    background-image: url("../img/kycee.jpg");*/
+/*}*/
+/*.oravskaIzba {*/
+/*    background-image: url("../img/oravskaizba.jpg");*/
+/*}*/
 
-.josuu{
-    background-image: url("../img/josuu.jpg");
-}
-.uno{
-    background-image: url("../img/uno.jpeg");
-}
+/*.josuu{*/
+/*    background-image: url("../img/josuu.jpg");*/
+/*}*/
+/*.uno{*/
+/*    background-image: url("../img/uno.jpeg");*/
+/*}*/
 
 @media (max-width: 768px) {
     .image-box {

@@ -1,6 +1,8 @@
 <?php
 /** @var \App\Models\Restaurant[] $restaurants */
 /** @var \App\Core\LinkGenerator $link */
+/** @var Array $data */
+/** @var \App\Core\Auth $auth */
 ?>
 <!DOCTYPE html>
 <html lang="sk">
@@ -12,63 +14,37 @@
     <link rel="stylesheet" href="../../../public/css/subcategories.css">
 </head>
 <body>
-
-
-<!--<div class="container-fluid mt-4">-->
-<!--    <h1 class="text-center mb-5">Reštaurácie</h1>-->
-<!---->
-<!--    <div class="row g-4">-->
-<!--        <div class="col-lg-6 col-md-6 col-12">-->
-<!--            <a href="" class="image-box kycer d-block"></a>-->
-<!--            <h3 class="mt-3 text-center">Kycer Burger</h3>-->
-<!--        </div>-->
-<!--        <div class="col-lg-6 col-md-6 col-12">-->
-<!--            <a href="" class="image-box oravskaIzba d-block"></a>-->
-<!--            <h3 class="mt-3 text-center">Oravska Izba</h3>-->
-<!--        </div>-->
-<!--        <div class="col-lg-6 col-md-6 col-12">-->
-<!--            <a href="" class="image-box josuu d-block"></a>-->
-<!--            <h3 class="mt-3 text-center">Josu</h3>-->
-<!--        </div>-->
-<!--        <div class="col-lg-6 col-md-6 col-12">-->
-<!--            <a href="" class="image-box uno d-block"></a>-->
-<!--            <h3 class="mt-3 text-center">Pizzeria Uno</h3>-->
-<!--        </div>-->
-<!--    </div>-->
-    <!-- Tlačidlo na pridanie reštaurácie (len pre prihlásených) -->
-    <?php if ($auth->isLogged()): ?>
+<?php if ($auth->isLogged()): ?>
     <div class="text-center mt-4">
-        <a href="<?= $link->url('restaurant.add') ?>" class="btn btn-primary">Pridať reštauráciu</a>
+        <a href="<?= $link->url('restaurant.add') ?>" class="btn btn-primary">Pridať novú reštauráciu</a>
     </div>
-    <?php endif; ?>
-</div>
-
+<?php endif; ?>
 <div class="container mt-4">
     <h1 class="text-center mb-5">Reštaurácie</h1>
-    <div class="row">
-        <?php if (isset($restaurants) && !empty($restaurants)): ?>
-            <?php foreach ($restaurants as $restaurant): ?>
-                <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-                    <div class="card">
-                        <img src="public/uploads/<?= htmlspecialchars($restaurant->getImagePath()) ?>"
-                             class="card-img-top"
-                             alt="<?= htmlspecialchars($restaurant->getName()) ?>">
-                        <div class="card-body">
-                            <h5 class="card-title"><?= htmlspecialchars($restaurant->getName()) ?></h5>
-                            <a href="<?= $this->url('restaurant.detail', ['id' => $restaurant->getId()]) ?>"
-                               class="btn btn-primary">
-                                Viac info
-                            </a>
-                        </div>
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        <?php foreach ($data['restaurants'] as $restaurant): ?>
+            <div class="col">
+            <div class="card h-100" >
+                    <img src="/public/uploads/<?= htmlspecialchars($restaurant->getImagePath()) ?>"
+                         class="card-img-top h-100"
+                         alt="<?= htmlspecialchars($restaurant->getName()) ?>">
+                    <div class="card-body text-center">
+                        <h5 class="card-title"><?= htmlspecialchars($restaurant->getName()) ?></h5>
+                        <p class="card-text">
+                            <?= htmlspecialchars($restaurant->getAddress()) ?>
+                        </p>
+                        <?php if ($auth->isLogged()): ?>
+                            <div class="d-flex justify-content-center gap-2">
+                                <a href="<?= $link->url('restaurant.add', ['id' => $restaurant->getId()]) ?>" class="btn btn-primary">Pridať</a>
+                                <a href="<?= $link->url('restaurant.delete', ['id' => $restaurant->getId()]) ?>" class="btn btn-danger">Zmazať</a>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <p class="text-center">Žiadne reštaurácie na zobrazenie.</p>
-        <?php endif; ?>
+            </div>
+        <?php endforeach; ?>
     </div>
+
 </div>
-
-
 </body>
 </html>

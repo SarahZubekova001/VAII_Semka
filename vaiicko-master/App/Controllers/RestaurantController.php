@@ -3,30 +3,32 @@
 namespace App\Controllers;
 
 use App\Core\AControllerBase;
+use App\Core\HTTPException;
 use App\Core\Responses\RedirectResponse;
 use App\Core\Responses\Response;
 use App\Models\Restaurant;
 use App\Helpers\FileStorage;
+use App\Core\DB\Connection;
 
 class RestaurantController extends AControllerBase
 {
         public function index(): Response
     {
-        $restaurants = Restaurant::getAll(); // Načítanie všetkých reštaurácií
-        var_dump($restaurants); // Debug: výpis reštaurácií
-        die(); // Ukončenie vykonávania
-        return $this->html(['restaurants' => $restaurants], 'Restaurant/restaurants');
+        return $this->html(['restaurants' => Restaurant::getAll()]);
+
     }
 
 
     public function add(): Response
     {
-        return $this->html([], 'add');
+        return $this->html();
     }
 
+    /**
+     * @throws HTTPException
+     */
     public function store(): Response
     {
-        var_dump("Entering store() method"); // Debug
         $id = $this->request()->getValue('id');
         $oldFileName = "";
 
@@ -53,14 +55,6 @@ class RestaurantController extends AControllerBase
             }
             $newFileName = FileStorage::saveFile($this->request()->getFiles()['image']);
             $restaurant->setImagePath($newFileName);
-
-
-            try {
-                $restaurant->save();
-            } catch (\Exception $e) {
-                throw $e;
-            }
-
             return new RedirectResponse($this->url('restaurant.index'));
         }
     }
