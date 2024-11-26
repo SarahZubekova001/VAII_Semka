@@ -35,7 +35,7 @@
                         </p>
                         <?php if ($auth->isLogged()): ?>
                             <div class="d-flex justify-content-center gap-2">
-                                <a href="<?= $link->url('restaurant.add', ['id' => $restaurant->getId()]) ?>" class="btn btn-primary">Pridať</a>
+                                <a href="<?= $link->url('restaurant.add', ['id' => $restaurant->getId()]) ?>" class="btn btn-primary">Upravit</a>
                                 <a href="<?= $link->url('restaurant.delete', ['id' => $restaurant->getId()]) ?>" class="btn btn-danger">Zmazať</a>
                             </div>
                         <?php endif; ?>
