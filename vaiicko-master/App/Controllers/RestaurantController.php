@@ -32,8 +32,11 @@ class RestaurantController extends AControllerBase
         $id = $this->request()->getValue('id');
         $oldFileName = "";
 
-        if ($id > 0) {
+        if ($id) {
             $restaurant = Restaurant::getOne($id);
+            if (!$restaurant) {
+                throw new \Exception("Reštaurácia nenájdená");
+            }
             $oldFileName = $restaurant->getImagePath();
         } else {
             $restaurant = new Restaurant();
@@ -43,21 +46,20 @@ class RestaurantController extends AControllerBase
         $restaurant->setName($this->request()->getValue('name'));
         $restaurant->setAddress($this->request()->getValue('address'));
         $restaurant->setOpeningHours($this->request()->getValue('opening_hours'));
-        $restaurant->setImagePath($this->request()->getFiles()['image']['name']);
 
-        $formErrors = $this->formErrors();
-
-        if (count($formErrors) > 0) {
-            return $this->html(['errors' => $formErrors, 'restaurants' => $restaurant], 'add');
-        } else {
-            if ($oldFileName != "") {
+        // Uloženie obrázka, ak bol nahraný nový
+        if (!empty($this->request()->getFiles()['image']['name'])) {
+            if ($oldFileName) {
                 FileStorage::deleteFile($oldFileName);
             }
             $newFileName = FileStorage::saveFile($this->request()->getFiles()['image']);
             $restaurant->setImagePath($newFileName);
-            return new RedirectResponse($this->url('restaurant.index'));
         }
+
+        $restaurant->save();
+        return new RedirectResponse($this->url('restaurant.restaurants'));
     }
+
 
     private function formErrors(): array
     {
@@ -101,4 +103,30 @@ class RestaurantController extends AControllerBase
             ]
         );
     }
+    public function edit(): Response
+    {
+        $id = $this->request()->getValue('id');
+        $restaurant = Restaurant::getOne($id);
+
+        if (!$restaurant) {
+            throw new \Exception("Reštaurácia nenájdená");
+        }
+
+        return $this->html(['restaurant' => $restaurant]);
+    }
+    public function delete(): Response
+    {
+        $id = $this->request()->getValue('id');
+        $restaurant = Restaurant::getOne($id);
+
+        if (is_null($restaurant)) {
+            throw new HTTPException(404);
+        } else {
+            FileStorage::deleteFile($restaurant->getImagePath());
+            $restaurant->delete();
+            return new RedirectResponse($this->url('restaurant.restaurants'));
+        }
+    }
+
+
 }

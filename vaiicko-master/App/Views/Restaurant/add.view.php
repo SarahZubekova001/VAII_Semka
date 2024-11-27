@@ -7,7 +7,9 @@
 <body>
 
 <div class="container mt-4">
+    <div class="col-6 d-flex gap-4  flex-column">
     <h1 class="text-center mb-5">Pridať reštauráciu</h1>
+
 
     <form method="post" action="<?= $link->url("restaurant.store") ?>" enctype="multipart/form-data">
         <div class="mb-3">
@@ -28,6 +30,7 @@
         </div>
         <button type="submit" class="btn btn-success">Uložiť</button>
     </form>
+    </div>
 </div>
 
 

@@ -14,13 +14,14 @@
     <link rel="stylesheet" href="../../../public/css/subcategories.css">
 </head>
 <body>
-<?php if ($auth->isLogged()): ?>
-    <div class="text-center mt-4">
-        <a href="<?= $link->url('restaurant.add') ?>" class="btn btn-primary">Pridať novú reštauráciu</a>
-    </div>
-<?php endif; ?>
+
 <div class="container mt-4">
     <h1 class="text-center mb-5">Reštaurácie</h1>
+    <?php if ($auth->isLogged()): ?>
+    <div class="text-center mt-1">
+        <a href="<?= $link->url('restaurant.add') ?>" class="btn btn-primary">Pridať novú reštauráciu</a>
+    </div>
+    <?php endif; ?>
     <div class="row row-cols-1 row-cols-md-2 g-4">
         <?php foreach ($data['restaurants'] as $restaurant): ?>
             <div class="col">
@@ -35,7 +36,7 @@
                         </p>
                         <?php if ($auth->isLogged()): ?>
                             <div class="d-flex justify-content-center gap-2">
-                                <a href="<?= $link->url('restaurant.add', ['id' => $restaurant->getId()]) ?>" class="btn btn-primary">Upravit</a>
+                                <a href="<?= $link->url('restaurant.edit', ['id' => $restaurant->getId()]) ?>" class="btn btn-primary">Upraviť</a>
                                 <a href="<?= $link->url('restaurant.delete', ['id' => $restaurant->getId()]) ?>" class="btn btn-danger">Zmazať</a>
                             </div>
                         <?php endif; ?>
