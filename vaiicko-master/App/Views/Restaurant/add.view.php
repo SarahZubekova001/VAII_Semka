@@ -5,6 +5,13 @@
     <title>Pridanie</title>
 </head>
 <body>
+<?php if (!is_null(@$data['errors'])): ?>
+    <?php foreach ($data['errors'] as $error): ?>
+        <div class="alert alert-danger" role="alert">
+            <?= $error ?>
+        </div>
+    <?php endforeach; ?>
+<?php endif; ?>
 
 <div class="container mt-4">
     <div class="col-6 d-flex gap-4  flex-column">
