@@ -38,7 +38,7 @@ class RestaurantController extends AControllerBase
             if (!$restaurant) {
                 throw new \Exception("Reštaurácia nenájdená");
             }
-            $oldFileName = $restaurant->getImagePath();
+            $oldFileName = $restaurant->getImagePath(); // Získaj cestu k starému obrázku
         } else {
             // Ak ID nie je zadané, ide o nový príspevok
             $restaurant = new Restaurant();
@@ -49,22 +49,31 @@ class RestaurantController extends AControllerBase
         $restaurant->setAddress($this->request()->getValue('address'));
         $restaurant->setOpeningHours($this->request()->getValue('opening_hours'));
 
-        if (!empty($this->request()->getFiles()['image']['name'])) {
-            // Spracuj nový obrázok
+        // Validácia formulára
+        $formErrors = $this->formErrors();
+        if (count($formErrors) > 0) {
+            // Ak sú chyby, vráť používateľovi formulár s chybami
+            return $this->html(['errors' => $formErrors, 'restaurant' => $restaurant], $id > 0 ? 'edit' : 'add');
+        }
+
+        // Spracovanie obrázka
+        $imageFile = $this->request()->getFiles()['image'] ?? null;
+        if (!empty($imageFile['name'])) {
+            // Ak je nový obrázok nahraný
             if ($oldFileName) {
                 FileStorage::deleteFile($oldFileName); // Vymaž starý obrázok
             }
-            $newFileName = FileStorage::saveFile($this->request()->getFiles()['image']);
+            $newFileName = FileStorage::saveFile($imageFile);
             $restaurant->setImagePath($newFileName);
-        } elseif ($oldFileName) {
-            // Zachovaj existujúci obrázok
+        } elseif ($id > 0) {
+            // Zachovaj starý obrázok, ak nebol nahraný nový a ide o úpravu
             $restaurant->setImagePath($oldFileName);
         } else {
-            // Nastav prázdnu hodnotu, ak nie je obrázok
+            // Nastav prázdnu hodnotu, ak nejde o úpravu a obrázok nebol nahraný
             $restaurant->setImagePath('');
         }
 
-        // Ulož reštauráciu (bude to INSERT alebo UPDATE podľa nastavenia _dbId)
+        // Ulož reštauráciu (INSERT alebo UPDATE podľa _dbId)
         $restaurant->save();
 
         return new RedirectResponse($this->url('restaurant.restaurants'));
@@ -73,18 +82,24 @@ class RestaurantController extends AControllerBase
 
 
 
+
     private function formErrors(): array
     {
         $errors = [];
-        if (empty($this->request()->getFiles()['image']['name'])) {
-            $errors[] = "Pole Súbor obrázka musí byť vyplnené!";
+        $allowedMimeTypes = ['image/jpeg', 'image/png'];
+
+        $imageFile = $this->request()->getFiles()['image'] ?? null;
+
+        if (!empty($imageFile['name'])) {
+            // Kontrola MIME typu
+            if (!in_array($imageFile['type'], $allowedMimeTypes)) {
+                $errors[] = "Obrázok musí byť vo formáte JPG alebo PNG!";
+            }
         }
+
+        // Ďalšie validácie
         if (empty($this->request()->getValue('name'))) {
             $errors[] = "Pole Názov musí byť vyplnené!";
-        }
-        if (!empty($this->request()->getFiles()['image']['name']) &&
-            !in_array($this->request()->getFiles()['image']['type'], ['image/jpeg', 'image/png'])) {
-            $errors[] = "Obrázok musí byť typu JPG alebo PNG!";
         }
         if (empty($this->request()->getValue('address'))) {
             $errors[] = "Adresa musí byť vyplnená!";
@@ -92,6 +107,7 @@ class RestaurantController extends AControllerBase
         if (empty($this->request()->getValue('opening_hours'))) {
             $errors[] = "Otváracie hodiny musia byť vyplnené!";
         }
+
         return $errors;
     }
 
