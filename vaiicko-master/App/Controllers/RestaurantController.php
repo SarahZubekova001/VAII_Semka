@@ -29,36 +29,48 @@ class RestaurantController extends AControllerBase
      */
     public function store(): Response
     {
-        $id = $this->request()->getValue('id');
-        $oldFileName = "";
+        $id = $this->request()->getValue('id'); // Získaj ID z požiadavky
+        $oldFileName = null;
 
-        if ($id) {
+        if ($id > 0) {
+            // Načítaj existujúcu reštauráciu podľa ID
             $restaurant = Restaurant::getOne($id);
             if (!$restaurant) {
                 throw new \Exception("Reštaurácia nenájdená");
             }
             $oldFileName = $restaurant->getImagePath();
         } else {
+            // Ak ID nie je zadané, ide o nový príspevok
             $restaurant = new Restaurant();
-            $restaurant->setAuthor($this->app->getAuth()->getLoggedUserName());
         }
 
+        // Nastav údaje pre reštauráciu
         $restaurant->setName($this->request()->getValue('name'));
         $restaurant->setAddress($this->request()->getValue('address'));
         $restaurant->setOpeningHours($this->request()->getValue('opening_hours'));
 
-        // Uloženie obrázka, ak bol nahraný nový
         if (!empty($this->request()->getFiles()['image']['name'])) {
+            // Spracuj nový obrázok
             if ($oldFileName) {
-                FileStorage::deleteFile($oldFileName);
+                FileStorage::deleteFile($oldFileName); // Vymaž starý obrázok
             }
             $newFileName = FileStorage::saveFile($this->request()->getFiles()['image']);
             $restaurant->setImagePath($newFileName);
+        } elseif ($oldFileName) {
+            // Zachovaj existujúci obrázok
+            $restaurant->setImagePath($oldFileName);
+        } else {
+            // Nastav prázdnu hodnotu, ak nie je obrázok
+            $restaurant->setImagePath('');
         }
 
+        // Ulož reštauráciu (bude to INSERT alebo UPDATE podľa nastavenia _dbId)
         $restaurant->save();
+
         return new RedirectResponse($this->url('restaurant.restaurants'));
     }
+
+
 
 
     private function formErrors(): array
