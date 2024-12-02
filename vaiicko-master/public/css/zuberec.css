@@ -1,10 +1,8 @@
-/* Celkové nastavenia */
 body {
     background-color: #f8f9fa;
     font-family: Arial, sans-serif;
 }
 
-/* Hero sekcia */
 .hero {
     background: url('../img/zuberec.jpg') no-repeat center center;
     background-size: cover;
@@ -20,27 +18,16 @@ body {
     font-size: 3rem;
 }
 
-/* Obsahová sekcia */
 .content-section {
     padding: 40px 20px;
 }
 
-/* Obrázky definované cez CSS */
 .image-box {
     background-position: center;
     border-radius: 15px; /* Zaoblené rohy */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Jemný tieň */
 }
 
-/* Nastavenie pre druhý obrázok */
-#zuberec {
-    height: 470px;
-    background: url('../img/zuberec2.jpg') no-repeat center center;
-    background-size: contain; /* Zabezpečí, že sa zobrazí celý obrázok */
-    background-color: #e3e3e3; /* Záložná farba na pozadí */
-}
-
-/* Obrázky pre inštitúcie */
 .institution-box {
     height: 230px;
     width: 100%; /* Obrázky budú zaberať celý stĺpec */
@@ -62,7 +49,6 @@ body {
     background: url('../img/obecny_urad.jpg') no-repeat center center;
 }
 
-/* Textové boxy */
 h4 {
     margin-top: 10px;
     font-size: 1.25rem;
@@ -82,11 +68,10 @@ p {
     }
 
     .institution-box {
-        height: 200px; /* Zmenšenie výšky obrázkov na mobiloch */
+        height: 200px;
     }
 
     #zuberec {
-        height: 250px; /* Zmenšenie výšky na mobiloch */
+        height: 250px;
     }
 }
-

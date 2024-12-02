@@ -33,53 +33,47 @@ class RestaurantController extends AControllerBase
         $oldFileName = null;
 
         if ($id > 0) {
-            // Načítaj existujúcu reštauráciu podľa ID
+
             $restaurant = Restaurant::getOne($id);
             if (!$restaurant) {
                 throw new \Exception("Reštaurácia nenájdená");
             }
             $oldFileName = $restaurant->getImagePath(); // Získaj cestu k starému obrázku
         } else {
-            // Ak ID nie je zadané, ide o nový príspevok
             $restaurant = new Restaurant();
         }
 
-        // Nastav údaje pre reštauráciu
         $restaurant->setName($this->request()->getValue('name'));
         $restaurant->setAddress($this->request()->getValue('address'));
         $restaurant->setOpeningHours($this->request()->getValue('opening_hours'));
 
-        // Validácia formulára
+
         $formErrors = $this->formErrors();
         if (count($formErrors) > 0) {
             // Ak sú chyby, vráť používateľovi formulár s chybami
             return $this->html(['errors' => $formErrors, 'restaurant' => $restaurant], $id > 0 ? 'edit' : 'add');
         }
 
-        // Spracovanie obrázka
+
         $imageFile = $this->request()->getFiles()['image'] ?? null;
         if (!empty($imageFile['name'])) {
-            // Ak je nový obrázok nahraný
+
             if ($oldFileName) {
-                FileStorage::deleteFile($oldFileName); // Vymaž starý obrázok
+                FileStorage::deleteFile($oldFileName);
             }
             $newFileName = FileStorage::saveFile($imageFile);
             $restaurant->setImagePath($newFileName);
         } elseif ($id > 0) {
-            // Zachovaj starý obrázok, ak nebol nahraný nový a ide o úpravu
             $restaurant->setImagePath($oldFileName);
         } else {
             // Nastav prázdnu hodnotu, ak nejde o úpravu a obrázok nebol nahraný
             $restaurant->setImagePath('');
         }
 
-        // Ulož reštauráciu (INSERT alebo UPDATE podľa _dbId)
         $restaurant->save();
 
         return new RedirectResponse($this->url('restaurant.restaurants'));
     }
-
-
 
 
 
@@ -97,7 +91,6 @@ class RestaurantController extends AControllerBase
             }
         }
 
-        // Ďalšie validácie
         if (empty($this->request()->getValue('name'))) {
             $errors[] = "Pole Názov musí byť vyplnené!";
         }

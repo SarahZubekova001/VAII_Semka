@@ -4,16 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>O obci Zuberec</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../../../public/css/zuberec.css" >
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="../../../public/css/zuberec.css">
+    <link rel="stylesheet" href="../../../public/css/slider.css">
 </head>
 <body>
 
+<div class="slideshow-container">
+    <div class="mySlides Myfade">
+        <img src="../../../public/img/zuberec.jpg" style="width:100%">
+    </div>
 
-<!-- Hero Section -->
-<section class="hero">
-    <h1>Obec Zuberec</h1>
-</section>
+    <div class="mySlides Myfade">
+        <img src="../../../public/img/zuberec.webp" style="width:100%">
+    </div>
+
+    <div class="mySlides Myfade">
+        <img src="../../../public/img/zuberec2.jpg" style="width:100%">
+    </div>
+
+    <!-- Next and previous buttons -->
+    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+    <a class="next" onclick="plusSlides(1)">&#10095;</a>
+</div>
+<br>
+
+<!-- The dots/circles -->
+<div style="text-align:center">
+    <span class="dot" onclick="currentSlide(1)"></span>
+    <span class="dot" onclick="currentSlide(2)"></span>
+    <span class="dot" onclick="currentSlide(3)"></span>
+</div>
+
 
 <!-- Informácie o obci -->
 <div class="container content-section">
@@ -60,6 +82,10 @@
     </div>
 </div>
 
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="../../../public/js/script.js" defer></script>
+
 </body>
 </html>
