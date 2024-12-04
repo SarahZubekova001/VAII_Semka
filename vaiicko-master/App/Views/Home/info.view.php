@@ -12,14 +12,18 @@
 
 <div class="slideshow-container">
     <div class="mySlides Myfade">
+        <div class="numbertext">1 / 3</div>
         <img src="../../../public/img/zuberec.jpg" style="width:100%">
+        <div class="text">Krásy obce Zuberec</div>
     </div>
 
     <div class="mySlides Myfade">
+        <div class="numbertext">2 / 3</div>
         <img src="../../../public/img/zuberec.webp" style="width:100%">
     </div>
 
     <div class="mySlides Myfade">
+        <div class="numbertext">3 / 3</div>
         <img src="../../../public/img/zuberec2.jpg" style="width:100%">
     </div>
 
@@ -29,7 +33,7 @@
 </div>
 <br>
 
-<!-- The dots/circles -->
+
 <div style="text-align:center">
     <span class="dot" onclick="currentSlide(1)"></span>
     <span class="dot" onclick="currentSlide(2)"></span>
@@ -41,7 +45,7 @@
 <div class="container content-section">
     <div class="row">
         <div class="col-md-6">
-            <div class="image-box" id="zuberec"></div>
+            <div class="image-box zuberec" ></div>
         </div>
         <div class="col-md-6">
             <h2>O obci</h2>

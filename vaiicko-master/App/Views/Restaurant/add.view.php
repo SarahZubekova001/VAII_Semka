@@ -32,6 +32,10 @@
             <textarea class="form-control" id="opening_hours" name="opening_hours" rows="3" required></textarea>
         </div>
         <div class="mb-3">
+            <label for="phone_number" class="form-label">Telefónne číslo</label>
+            <input type="text" class="form-control" id="phone_number" name="phone_number" required>
+        </div>
+        <div class="mb-3">
             <label for="image" class="form-label">Obrázok</label>
             <input type="file" class="form-control" id="image" name="image" accept="image/*" required>
         </div>

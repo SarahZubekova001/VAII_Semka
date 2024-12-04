@@ -24,16 +24,23 @@ body {
 
 .image-box {
     background-position: center;
-    border-radius: 15px; /* Zaoblené rohy */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Jemný tieň */
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.zuberec {
+    height: 470px;
+    background: url('/public/img/zuberec.jpg') no-repeat center center;
+    background-size: contain;
+    background-color: #e3e3e3;
 }
 
 .institution-box {
     height: 230px;
-    width: 100%; /* Obrázky budú zaberať celý stĺpec */
-    background-size: contain !important; /* Zabezpečí, že sa zobrazia celé obrázky bez orezania */
-    background-repeat: no-repeat; /* Zabráni opakovaniu obrázkov */
-    background-color: #e3e3e3; /* Pridaná záložná farba pre obrázky */
+    width: 100%;
+    background-size: contain !important;
+    background-repeat: no-repeat;
+    background-color: #e3e3e3;
     margin-bottom: 20px;
 }
 
@@ -49,6 +56,7 @@ body {
     background: url('../img/obecny_urad.jpg') no-repeat center center;
 }
 
+/* Textové boxy */
 h4 {
     margin-top: 10px;
     font-size: 1.25rem;

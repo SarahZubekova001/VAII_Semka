@@ -26,9 +26,12 @@
             </div>
             <div class="mb-3">
                 <label for="opening_hours" class="form-label">Otváracie hodiny</label>
-                <textarea class="form-control" id="opening_hours" name="opening_hours" rows="3" required>
-            <?= @$data['restaurant']?->getOpeningHours() ?>
-        </textarea>
+                <textarea class="form-control" id="opening_hours" name="opening_hours" rows="3" required><?= @$data['restaurant']?->getOpeningHours() ?></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="phone_number" class="form-label">Telefónne číslo</label>
+                <input type="text" class="form-control" id="phone_number" name="phone_number"
+                       value="<?= @$data['restaurant']?->getPhoneNumber() ?>" required>
             </div>
             <div class="mb-3">
                 <label for="image" class="form-label">Obrázok</label>

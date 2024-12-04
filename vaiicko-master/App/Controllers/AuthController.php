@@ -30,11 +30,14 @@ class AuthController extends AControllerBase
     public function login(): Response
     {
         $formData = $this->app->getRequest()->getPost();
+        $currentUrl = $_SESSION['current_url'] ?? null;
         $logged = null;
+
         if (isset($formData['submit'])) {
             $logged = $this->app->getAuth()->login($formData['login'], $formData['password']);
             if ($logged) {
-                return $this->redirect($this->url("home.index")); // Zostaň na aktuálnej stránke po prihlásení
+                unset($_SESSION['current_url']);
+                return $this->redirect($currentUrl ?? $this->url("home.index"));
             }
         }
 
@@ -42,6 +45,11 @@ class AuthController extends AControllerBase
         return $this->html($data);
     }
 
+    public function showLoginForm(): Response
+    {
+        $_SESSION['current_url'] = $this->app->getRequest()->getReferer();
+        return $this->html();
+    }
     /**
      * Logout a user
      * @return Response

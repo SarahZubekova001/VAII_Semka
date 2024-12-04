@@ -29,7 +29,7 @@ class RestaurantController extends AControllerBase
      */
     public function store(): Response
     {
-        $id = $this->request()->getValue('id'); // Získaj ID z požiadavky
+        $id = $this->request()->getValue('id');
         $oldFileName = null;
 
         if ($id > 0) {
@@ -47,12 +47,15 @@ class RestaurantController extends AControllerBase
         $restaurant->setAddress($this->request()->getValue('address'));
         $restaurant->setOpeningHours($this->request()->getValue('opening_hours'));
 
-
         $formErrors = $this->formErrors();
         if (count($formErrors) > 0) {
-            // Ak sú chyby, vráť používateľovi formulár s chybami
             return $this->html(['errors' => $formErrors, 'restaurant' => $restaurant], $id > 0 ? 'edit' : 'add');
         }
+        $phoneNumber = $this->request()->getValue('phone_number');
+        if (!is_numeric($phoneNumber)) {
+            return $this->html(['errors' => ['Telefonne číslo musí byť číslo!'], 'restaurant' => $restaurant], $id > 0 ? 'edit' : 'add');
+        }
+        $restaurant->setPhoneNumber((int) $phoneNumber);
 
 
         $imageFile = $this->request()->getFiles()['image'] ?? null;
@@ -70,6 +73,11 @@ class RestaurantController extends AControllerBase
             $restaurant->setImagePath('');
         }
 
+        if (count($formErrors) > 0) {
+            // Ak sú chyby, vráť používateľovi formulár s chybami
+            return $this->html(['errors' => $formErrors, 'restaurant' => $restaurant], $id > 0 ? 'edit' : 'add');
+        }
+
         $restaurant->save();
 
         return new RedirectResponse($this->url('restaurant.restaurants'));
@@ -83,12 +91,15 @@ class RestaurantController extends AControllerBase
         $allowedMimeTypes = ['image/jpeg', 'image/png'];
 
         $imageFile = $this->request()->getFiles()['image'] ?? null;
-
+        echo $imageFile['size'];
         if (!empty($imageFile['name'])) {
-            // Kontrola MIME typu
             if (!in_array($imageFile['type'], $allowedMimeTypes)) {
                 $errors[] = "Obrázok musí byť vo formáte JPG alebo PNG!";
             }
+
+        }
+        if ($imageFile['size'] > 5 * 1024 * 1024) { // 16 MB v bajtoch
+            $errors[] = "Obrázok je príliš veľký! Maximálna povolená veľkosť je 16 MB.";
         }
 
         if (empty($this->request()->getValue('name'))) {
@@ -99,6 +110,12 @@ class RestaurantController extends AControllerBase
         }
         if (empty($this->request()->getValue('opening_hours'))) {
             $errors[] = "Otváracie hodiny musia byť vyplnené!";
+        }
+        if (empty($this->request()->getValue('phone_number'))) {
+            $errors[] = "Telefonne číslo musí byť vyplnené!";
+        }
+        if (!is_numeric($this->request()->getValue('phone_number'))) {
+            $errors[] = "Telefonne číslo musí byť číslo!";
         }
 
         return $errors;
@@ -148,6 +165,8 @@ class RestaurantController extends AControllerBase
             return new RedirectResponse($this->url('restaurant.restaurants'));
         }
     }
+
+
 
 
 }
