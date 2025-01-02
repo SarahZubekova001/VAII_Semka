@@ -9,6 +9,7 @@ use App\Core\Responses\Response;
 use App\Models\Restaurant;
 use App\Helpers\FileStorage;
 use App\Core\DB\Connection;
+use App\Models\Address;
 
 class RestaurantController extends AControllerBase
 {
@@ -26,6 +27,7 @@ class RestaurantController extends AControllerBase
 
     /**
      * @throws HTTPException
+     * @throws \Exception
      */
     public function store(): Response
     {
@@ -44,8 +46,23 @@ class RestaurantController extends AControllerBase
         }
 
         $restaurant->setName($this->request()->getValue('name'));
-        $restaurant->setAddress($this->request()->getValue('address'));
+        //$restaurant->setAddress($this->request()->getValue('address'));
         $restaurant->setOpeningHours($this->request()->getValue('opening_hours'));
+
+        $street = $this->request()->getValue('street');
+        $city = $this->request()->getValue('city');
+        $postalCode = (int)$this->request()->getValue('postal_code');
+        $descriptiveNumber = (int)$this->request()->getValue('descriptive_number');
+
+        $address = Address::findOrCreate($street, $city, $postalCode, $descriptiveNumber);
+
+        $restaurant->setAddressId($address->getId());
+
+        if (!$restaurant->getAddressId()) {
+            throw new \Exception("Address ID is null, address was not properly created.");
+        }
+        error_log("Restaurant Address ID: " . $restaurant->getAddressId());
+
 
         $formErrors = $this->formErrors();
         if (count($formErrors) > 0) {
@@ -91,7 +108,7 @@ class RestaurantController extends AControllerBase
         $allowedMimeTypes = ['image/jpeg', 'image/png'];
 
         $imageFile = $this->request()->getFiles()['image'] ?? null;
-        echo $imageFile['size'];
+        //echo $imageFile['size'];
         if (!empty($imageFile['name'])) {
             if (!in_array($imageFile['type'], $allowedMimeTypes)) {
                 $errors[] = "Obrázok musí byť vo formáte JPG alebo PNG!";
@@ -105,9 +122,7 @@ class RestaurantController extends AControllerBase
         if (empty($this->request()->getValue('name'))) {
             $errors[] = "Pole Názov musí byť vyplnené!";
         }
-        if (empty($this->request()->getValue('address'))) {
-            $errors[] = "Adresa musí byť vyplnená!";
-        }
+
         if (empty($this->request()->getValue('opening_hours'))) {
             $errors[] = "Otváracie hodiny musia byť vyplnené!";
         }
@@ -135,11 +150,9 @@ class RestaurantController extends AControllerBase
     }
     public function restaurants(): Response
     {
-        return $this->html(
-            [
-                'restaurants' => Restaurant::getAll()
-            ]
-        );
+        $restaurants = Restaurant::getAll();
+
+        return $this->html(['restaurants' => $restaurants]);
     }
     public function edit(): Response
     {
@@ -150,7 +163,12 @@ class RestaurantController extends AControllerBase
             throw new \Exception("Reštaurácia nenájdená");
         }
 
-        return $this->html(['restaurant' => $restaurant]);
+        $address = $restaurant->getAddressDetails();
+
+        return $this->html([
+            'restaurant' => $restaurant,
+            'address' => $address
+        ]);
     }
     public function delete(): Response
     {

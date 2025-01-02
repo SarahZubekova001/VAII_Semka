@@ -34,11 +34,24 @@
                 <input type="text" class="form-control" id="name" name="name"
                        value="<?= @$data['restaurant']?->getName() ?>" required>
             </div>
+
+            <?php $address = @$data['restaurant']?->getAddressDetails(); ?>
             <div class="form-group">
-                <label for="address" class="form-label">Adresa</label>
-                <input type="text" class="form-control" id="address" name="address"
-                       value="<?= @$data['restaurant']?->getAddress() ?>" required>
+                <label for="street" class="form-label">Ulica</label>
+                <input type="text" class="form-control" id="street" name="street"
+                       value="<?= @$address?->getStreet() ?>" required>
             </div>
+            <div class="form-group">
+                <label for="city" class="form-label">Mesto</label>
+                <input type="text" class="form-control" id="city" name="city"
+                       value="<?= @$address?->getCity() ?>" required>
+            </div>
+            <div class="form-group">
+                <label for="postal_code" class="form-label">PSČ</label>
+                <input type="text" class="form-control" id="postal_code" name="postal_code"
+                       value="<?= @$address?->getPostalCode() ?>" required>
+            </div>
+
             <div class="form-group">
                 <label for="opening_hours" class="form-label">Otváracie hodiny</label>
                 <textarea class="form-control" id="opening_hours" name="opening_hours" rows="3" required><?= @$data['restaurant']?->getOpeningHours() ?></textarea>

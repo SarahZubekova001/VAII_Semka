@@ -32,7 +32,7 @@
                     <div class="card-body text-center">
                         <h5 class="card-title"><?= htmlspecialchars($restaurant->getName()) ?></h5>
                         <p class="card-text">
-                            <?= htmlspecialchars($restaurant->getAddress()) ?>
+                            <?= htmlspecialchars($restaurant->getAddressDetails()->getStreet().', ' . $restaurant->getAddressDetails()->getCity()) ?>
                         </p>
                         <?php if ($auth->isLogged()): ?>
                             <div class="d-flex justify-content-center gap-2">

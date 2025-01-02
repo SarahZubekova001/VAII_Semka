@@ -9,7 +9,7 @@ class Restaurant extends Model
     protected ?int $id = null;
     protected ?string $name;
     protected ?string $image_path;
-    protected ?string $address;
+    protected ?int $id_address = null;
     protected ?string $opening_hours;
     protected ?string $author;
     protected ?int $phone_number;
@@ -19,7 +19,6 @@ class Restaurant extends Model
     {
         return $this->id;
     }
-
 
     public function getName(): ?string
     {
@@ -41,16 +40,15 @@ class Restaurant extends Model
         $this->image_path = $image_path;
     }
 
-    public function getAddress(): ?string
+    public function getAddressId(): ?int
     {
-        return $this->address;
+        return $this->id_address;
     }
 
-    public function setAddress(string $address): void
+    public function setAddressId(?int $id): void
     {
-        $this->address = $address;
+        $this->id_address = $id;
     }
-
     public function getOpeningHours(): ?string
     {
         return $this->opening_hours;
@@ -77,6 +75,10 @@ class Restaurant extends Model
     public function setPhoneNumber(int $phone_number): void
     {
         $this->phone_number = $phone_number;
+    }
+    public function getAddressDetails(): ?Address
+    {
+        return Address::getOne($this->id_address);
     }
 
 }

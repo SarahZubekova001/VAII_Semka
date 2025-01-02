@@ -32,9 +32,22 @@
                 <label for="name">Názov reštaurácie</label>
                 <input type="text" class="form-control" id="name" name="name" required>
             </div>
+
             <div class="form-group">
-                <label for="address">Adresa</label>
-                <input type="text" class="form-control" id="address" name="address" required>
+                <label for="street">Ulica</label>
+                <input type="text" class="form-control" id="street" name="street" required>
+            </div>
+            <div class="form-group">
+                <label for="city">Obec</label>
+                <input type="text" class="form-control" id="city" name="city" required>
+            </div>
+            <div class="form-group">
+                <label for="descriptive_number">Popisne číslo</label>
+                <input type="text" class="form-control" id="descriptive_number" name="descriptive_number" required>
+            </div>
+            <div class="form-group">
+                <label for="postal_code">PSČ</label>
+                <input type="text" class="form-control" id="postal_code" name="postal_code" required>
             </div>
             <div class="form-group">
                 <label for="opening_hours">Otváracie hodiny</label>
