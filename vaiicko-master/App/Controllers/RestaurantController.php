@@ -13,7 +13,7 @@ use App\Models\Address;
 
 class RestaurantController extends AControllerBase
 {
-        public function index(): Response
+    public function index(): Response
     {
         return $this->html(['restaurants' => Restaurant::getAll()]);
 

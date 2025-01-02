@@ -57,6 +57,7 @@
                 <label for="phone_number">Telefónne číslo</label>
                 <input type="text" class="form-control" id="phone_number" name="phone_number" required>
             </div>
+
             <div class="form-group">
                 <label for="image">Obrázok</label>
                 <input type="file" class="form-control" id="image" name="image" accept="image/*" required>

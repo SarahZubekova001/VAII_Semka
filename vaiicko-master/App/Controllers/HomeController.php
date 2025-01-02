@@ -32,20 +32,7 @@ class HomeController extends AControllerBase
         return $this->html();
     }
 
-    public function activity(): Response
-    {
-        return $this->html();
-    }
 
-    public function relax(): Response
-    {
-        return $this->html();
-    }
-
-    public function sport(): Response
-    {
-        return $this->html();
-    }
     public function spalena(): Response
     {
         return $this->html();

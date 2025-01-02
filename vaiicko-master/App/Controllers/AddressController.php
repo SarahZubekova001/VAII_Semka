@@ -24,12 +24,10 @@ class AddressController extends AControllerBase
         $postalCode = $this->request()->getValue('postal_code');
         $descriptiveNumber = $this->request()->getValue('descriptive_number');
 
-        // Kontrola vstupov
         if (empty($street) || empty($city) || empty($postalCode) || empty($descriptiveNumber)) {
             throw new \Exception("All address fields are required: street, city, postal_code, descriptive_number.");
         }
 
-        // Vytvorenie alebo získanie adresy
         $address = Address::findOrCreate($street, $city, (int)$postalCode, (int)$descriptiveNumber);
 
         if (!$address) {
