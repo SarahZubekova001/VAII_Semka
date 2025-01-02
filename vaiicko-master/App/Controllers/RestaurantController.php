@@ -32,7 +32,7 @@ class RestaurantController extends AControllerBase
     public function store(): Response
     {
         $id = $this->request()->getValue('id');
-        $oldFileName = null;
+        $oldImage = null;
 
         if ($id > 0) {
 
@@ -40,13 +40,12 @@ class RestaurantController extends AControllerBase
             if (!$restaurant) {
                 throw new \Exception("Reštaurácia nenájdená");
             }
-            $oldFileName = $restaurant->getImagePath(); // Získaj cestu k starému obrázku
+            $oldImage = $restaurant->getImagePath(); // Získaj cestu k starému obrázku
         } else {
             $restaurant = new Restaurant();
         }
 
         $restaurant->setName($this->request()->getValue('name'));
-        //$restaurant->setAddress($this->request()->getValue('address'));
         $restaurant->setOpeningHours($this->request()->getValue('opening_hours'));
 
         $street = $this->request()->getValue('street');
@@ -58,10 +57,6 @@ class RestaurantController extends AControllerBase
 
         $restaurant->setAddressId($address->getId());
 
-        if (!$restaurant->getAddressId()) {
-            throw new \Exception("Address ID is null, address was not properly created.");
-        }
-        error_log("Restaurant Address ID: " . $restaurant->getAddressId());
 
 
         $formErrors = $this->formErrors();
@@ -74,20 +69,15 @@ class RestaurantController extends AControllerBase
         }
         $restaurant->setPhoneNumber((int) $phoneNumber);
 
+        $restaurant->save();
 
         $imageFile = $this->request()->getFiles()['image'] ?? null;
         if (!empty($imageFile['name'])) {
-
-            if ($oldFileName) {
-                FileStorage::deleteFile($oldFileName);
+            if ($oldImage) {
+                FileStorage::deleteFile($oldImage->getPath());
             }
             $newFileName = FileStorage::saveFile($imageFile);
             $restaurant->setImagePath($newFileName);
-        } elseif ($id > 0) {
-            $restaurant->setImagePath($oldFileName);
-        } else {
-            // Nastav prázdnu hodnotu, ak nejde o úpravu a obrázok nebol nahraný
-            $restaurant->setImagePath('');
         }
 
         if (count($formErrors) > 0) {
@@ -95,7 +85,7 @@ class RestaurantController extends AControllerBase
             return $this->html(['errors' => $formErrors, 'restaurant' => $restaurant], $id > 0 ? 'edit' : 'add');
         }
 
-        $restaurant->save();
+
 
         return new RedirectResponse($this->url('restaurant.restaurants'));
     }
@@ -151,7 +141,6 @@ class RestaurantController extends AControllerBase
     public function restaurants(): Response
     {
         $restaurants = Restaurant::getAll();
-
         return $this->html(['restaurants' => $restaurants]);
     }
     public function edit(): Response
@@ -178,12 +167,15 @@ class RestaurantController extends AControllerBase
         if (is_null($restaurant)) {
             throw new HTTPException(404);
         } else {
-            FileStorage::deleteFile($restaurant->getImagePath());
+            $image = $restaurant->getImagePath();
+            if ($image) {
+                FileStorage::deleteFile($image->getPath());
+                $image->delete();
+            }
             $restaurant->delete();
             return new RedirectResponse($this->url('restaurant.restaurants'));
         }
     }
-
 
 
 

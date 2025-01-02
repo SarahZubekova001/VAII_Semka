@@ -26,7 +26,7 @@
         <?php foreach ($data['restaurants'] as $restaurant): ?>
             <div class="col">
             <div class="card h-100" >
-                    <img src="/public/uploads/<?= htmlspecialchars($restaurant->getImagePath()) ?>"
+                    <img src="/public/uploads/<?= htmlspecialchars($restaurant->getImagePath()?->getPath()) ?>"
                          class="card-img-top h-100"
                          alt="<?= htmlspecialchars($restaurant->getName()) ?>">
                     <div class="card-body text-center">

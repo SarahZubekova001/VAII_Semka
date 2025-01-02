@@ -8,7 +8,6 @@ class Restaurant extends Model
 {
     protected ?int $id = null;
     protected ?string $name;
-    protected ?string $image_path;
     protected ?int $id_address = null;
     protected ?string $opening_hours;
     protected ?string $author;
@@ -30,14 +29,19 @@ class Restaurant extends Model
         $this->name = $name;
     }
 
-    public function getImagePath(): ?string
+    public function getImagePath(): ?Image
     {
-        return $this->image_path;
+        $images = Image::getAll("restaurant_id  = ?", [$this->id]);
+        return $images[0] ?? null; // Vráti prvý obrázok alebo null, ak obrázky neexistujú
     }
 
-    public function setImagePath(string $image_path): void
-    {
-        $this->image_path = $image_path;
+
+    public function setImagePath(string $path): void {
+
+        $image = new Image();
+        $image->setPath($path);
+        $image->setRestaurant($this); // Prepojte obrázok s reštauráciou
+        $image->save();
     }
 
     public function getAddressId(): ?int
