@@ -12,15 +12,15 @@
 
 <!-- Obsah -->
 <div class="container">
-    <a href="<?= $link->url('home.activity') ?>" class="section" id="aktivity">
+    <a href="<?= $link->url('post.activity') ?>" class="section" id="aktivity">
         <div class="text-overlay"></div>
         <h2>AKTIVITY</h2>
     </a>
-    <a href="<?= $link->url('home.relax') ?>" class="section" id="relax">
+    <a href="<?= $link->url('post.relax') ?>" class="section" id="relax">
         <div class="text-overlay"></div>
         <h2>RELAX</h2>
     </a>
-    <a href="<?= $link->url('home.sport') ?>" class="section" id="sport">
+    <a href="<?= $link->url('post.sport') ?>" class="section" id="sport">
         <div class="text-overlay"></div>
         <h2>ŠPORT</h2>
     </a>
