@@ -9,8 +9,8 @@ class Post extends Model
     protected ?int $id = null;
     protected ?string $name = null;
     protected ?string $description = null;
-    protected ?string $season = null; // "Summer" alebo "Winter"
-    protected ?string $category = null; // "Activity", "Relax" alebo "Sport"
+    protected ?string $season = null;
+    protected ?string $category = null;
     protected ?int $id_address = null;
     protected ?string $opening_hours = null;
     protected static string $tableName = 'posts';
@@ -18,6 +18,10 @@ class Post extends Model
     public function getId(): ?int
     {
         return $this->id;
+    }
+    public function setId(?int $id): void
+    {
+        $this->id = $id;
     }
 
     public function getName(): ?string
@@ -97,8 +101,27 @@ class Post extends Model
      * @return Image[]
      * @throws \Exception
      */
-    public function getImages(): array
+    public function getImagePath(): ?Image
     {
-        return Image::getAll("post_id = ?", [$this->id]);
+        $images = Image::getAll("post_id  = ?", [$this->id]);
+        return $images[0] ?? null; // Vráti prvý obrázok alebo null, ak obrázky neexistujú
     }
+    public function setImagePath(string $path): void {
+
+        $image = new Image();
+        $image->setPath($path);
+        $image->setPost($this);
+        $image->save();
+    }
+    public static function where(string $column, $value): array
+    {
+        $db = \App\Core\DB\Connection::connect(); // Získajte spojenie s databázou
+        $stmt = $db->prepare("SELECT * FROM posts WHERE $column = :value");
+        $stmt->execute(['value' => $value]);
+        $results = $stmt->fetchAll(\PDO::FETCH_CLASS, self::class);
+
+        return $results;
+    }
+
+
 }

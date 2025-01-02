@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Core\Model;
 
 class Image extends Model {
+
     protected ?int $id = null;
     protected ?string $path = null;
     protected ?int $restaurant_id = null;
