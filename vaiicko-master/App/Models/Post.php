@@ -148,6 +148,18 @@ class Post extends Model
         return $stmt->fetchAll(\PDO::FETCH_CLASS, static::class);
     }
 
+    public function getGallery(): array
+    {
+        return Image::getAll("post_id = ?", [$this->id]); // Vráti všetky obrázky priradené k príspevku
+    }
+
+    public function addImageToGallery(string $path): void
+    {
+        $gallery = new Image();
+        $gallery->setPath($path);
+        $gallery->setPost($this);
+        $gallery->save();
+    }
 
 
 

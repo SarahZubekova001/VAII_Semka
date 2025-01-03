@@ -31,18 +31,29 @@ $title = $categoryNameMap[$data['category']] ?? 'Príspevky';
     <div class="row row-cols-1 row-cols-md-2 g-4">
         <?php foreach ($data['posts'] as $post): ?>
             <div class="col">
-                    <a href="<?= $link->url('post.detail', ['id' => $post->getId()]) ?>" class="image-box d-block" style="background-image: url('/public/uploads/<?= htmlspecialchars($post->getImagePath()?->getPath()) ?>'); background-size: cover; background-position: center; height: 250px;"></a>
-                    <h5 class="card-title"><?= htmlspecialchars($post->getName()) ?></h5>
-                <?php if ($auth->isLogged()): ?>
-                    <input type="hidden" name="return_url" value="<?= htmlspecialchars($_SERVER['HTTP_REFERER'] ?? '') ?>">
-                    <a href="<?= $link->url('post.edit', ['id' => $post->getId()]) ?>" class="btn btn-primary">Upraviť</a>
-                    <a href="<?= $link->url('post.delete', ['id' => $post->getId()]) ?>" class="btn btn-danger">Zmazať</a>
 
-                <?php endif; ?>
+                    <?php $gallery = $post->getGallery(); ?>
+                    <?php if (!empty($gallery)): ?>
+                        <a href="<?= $link->url('post.detail', ['id' => $post->getId()]) ?>" class="d-block" style="text-decoration: none;">
+                            <div class="image-box" style="background-image: url('/public/uploads/<?= htmlspecialchars($gallery[0]->getPath()) ?>'); background-size: cover; background-position: center; height: 200px;"></div>
+                        </a>
+                    <?php else: ?>
+                        <p class="text-center text-muted">Obrázok nie je dostupný</p>
+                    <?php endif; ?>
+                        <h5 class="card-title"><?= htmlspecialchars($post->getName()) ?></h5>
+
+
+
+                    <?php if ($auth->isLogged()): ?>
+                        <div class="card-footer text-center">
+                            <input type="hidden" name="return_url" value="<?= htmlspecialchars($_SERVER['HTTP_REFERER'] ?? '') ?>">
+                            <a href="<?= $link->url('post.edit', ['id' => $post->getId()]) ?>" class="btn btn-primary btn-sm">Upraviť</a>
+                            <a href="<?= $link->url('post.delete', ['id' => $post->getId()]) ?>" class="btn btn-danger btn-sm">Zmazať</a>
+                        </div>
+                    <?php endif; ?>
+
             </div>
-
         <?php endforeach; ?>
-
     </div>
 </div>
 </body>

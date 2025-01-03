@@ -55,64 +55,134 @@ class PostController extends AControllerBase {
      */
     public function store(): Response
     {
-        $oldImage = null;
         $id = $this->request()->getValue('id');
-
-        if ($id > 0) {
-
-            $post = Post::getOne($id);
-            if (!$post) {
-                throw new Exception("Príspevok  nenájdeny");
-            }
-            $oldImage = $post->getImagePath(); // Získaj cestu k starému obrázku
-        } else {
-            $post = new Post();
-        }
+        $post = $id ? Post::getOne($id) : new Post();
 
         $name = $this->request()->getValue('name');
         $description = $this->request()->getValue('description');
         $category = $this->request()->getValue('category');
         $season = $this->request()->getValue('season');
-        $id_address = $this->request()->getValue('id_address');
         $opening_hours = $this->request()->getValue('opening_hours');
-        //$post = $id ? Post::getOne($id) : new Post();
-
-
-        if (!$post) {
-            throw new HTTPException(404, "Príspevok nenájdený");
-        }
         $street = $this->request()->getValue('street');
         $city = $this->request()->getValue('city');
-        $postalCode = (int)$this->request()->getValue('postal_code');
-        $descriptiveNumber = (int)$this->request()->getValue('descriptive_number');
+        $postalCode = $this->request()->getValue('postal_code');
+        $descriptiveNumberValue = $this->request()->getValue('descriptive_number');
 
-        $address = Address::findOrCreate($street, $city, $postalCode, $descriptiveNumber);
+        // Pridanie validačných chýb
+        $formErrors = [];
 
-        $post->setIdAddress($address->getId());
+        if (empty($name)) {
+            $formErrors[] = "Pole 'Názov' je povinné!";
+        }
+        if (empty($description)) {
+            $formErrors[] = "Pole 'Popis' je povinné!";
+        }
+        if (!is_numeric($descriptiveNumberValue)) {
+            $formErrors[] = "Popisné číslo musí byť číselné!";
+        } else {
+            $descriptiveNumber = (int) $descriptiveNumberValue;
+        }
+        if (!is_numeric($postalCode)) {
+            $formErrors[] = "PSC číslo musí byť číselné!";
+        } else {
+            $postalCode = (int) $postalCode;
+        }
 
+        // Ak sú chyby, vrátiť formulár s chybami
+        if (!empty($formErrors)) {
+            return $this->html([
+                'errors' => $formErrors,
+                'post' => $post
+            ], $id ? 'edit' : 'add');
+        }
+
+        // Pokračovanie v spracovaní
         $post->setName($name);
         $post->setDescription($description);
         $post->setCategory($category);
         $post->setSeason($season);
         $post->setOpeningHours($opening_hours);
 
+        $address = Address::findOrCreate($street, $city, $postalCode, $descriptiveNumber);
+        $post->setIdAddress($address->getId());
+
         $post->save();
 
-        $imageFile = $this->request()->getFiles()['image'] ?? null;
-        if (!empty($imageFile['name'])) {
-            if ($oldImage) {
-                FileStorage::deleteFile($oldImage->getPath());
-                $oldImage->delete();
-            }
-            $newFileName = FileStorage::saveFile($imageFile);
-            $post->setImagePath($newFileName);
+        return new RedirectResponse($this->url('post.category', ['category' => $category]));
+    }
+
+    private function formErrors(): array
+    {
+        $errors = [];
+
+        // Overenie názvu
+        if (empty($this->request()->getValue('name'))) {
+            $errors[] = "Pole 'Názov' je povinné!";
         }
 
-        $returnUrl = $this->request()->getValue('return_url') ?? $_SERVER['HTTP_REFERER'] ?? $this->url('post.activity', ['season' => 'zima']);
-        return new RedirectResponse($returnUrl);
+        // Overenie popisu
+        if (empty($this->request()->getValue('description'))) {
+            $errors[] = "Pole 'Popis' je povinné!";
+        }
 
+        // Overenie kategórie
+        if (empty($this->request()->getValue('category'))) {
+            $errors[] = "Pole 'Kategória' je povinné!";
+        }
 
+        // Overenie sezóny
+        if (empty($this->request()->getValue('season'))) {
+            $errors[] = "Pole 'Sezóna' je povinné!";
+        }
+
+        // Overenie otváracích hodín
+        if (empty($this->request()->getValue('opening_hours'))) {
+            $errors[] = "Pole 'Otváracie hodiny' je povinné!";
+        }
+
+        // Overenie ulice
+        if (empty($this->request()->getValue('street'))) {
+            $errors[] = "Pole 'Ulica' je povinné!";
+        }
+
+        // Overenie mesta
+        if (empty($this->request()->getValue('city'))) {
+            $errors[] = "Pole 'Mesto' je povinné!";
+        }
+
+        // Overenie PSČ
+        $postalCode = $this->request()->getValue('postal_code');
+        if (empty($postalCode)) {
+            $errors[] = "Pole 'PSČ' je povinné!";
+        } elseif (!is_numeric($postalCode)) {
+            $errors[] = "PSČ musí byť číselné!";
+        }
+
+        // Overenie popisného čísla
+        $descriptiveNumber = $this->request()->getValue('descriptive_number');
+        if (empty($descriptiveNumber)) {
+            $errors[] = "Pole 'Popisné číslo' je povinné!";
+        } elseif (!is_numeric($descriptiveNumber)) {
+            $errors[] = "Popisné číslo musí byť číselné!";
+        }
+
+        // Overenie obrázka
+        $allowedMimeTypes = ['image/jpeg', 'image/png'];
+        $imageFile = $this->request()->getFiles()['image'] ?? null;
+        if (!empty($imageFile['name'])) {
+            if (!in_array($imageFile['type'], $allowedMimeTypes)) {
+                $errors[] = "Obrázok musí byť vo formáte JPG alebo PNG!";
+            }
+
+            if ($imageFile['size'] > 5 * 1024 * 1024) { // 5 MB limit
+                $errors[] = "Obrázok je príliš veľký! Maximálna povolená veľkosť je 5 MB.";
+            }
+        }
+
+        return $errors;
     }
+
+
 
     /**
      * Zobrazenie formulára na úpravu existujúceho príspevku
@@ -167,7 +237,7 @@ class PostController extends AControllerBase {
         return $this->html([
             'posts' => $posts,
             'category' => $category
-        ], 'Post/post');
+        ], 'post');
     }
 
 

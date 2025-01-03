@@ -19,15 +19,18 @@
     <div class="card p-4 w-100" style="max-width: 600px;">
         <h1 class="text-center mb-4">Pridať príspevok</h1>
 
-        <?php if (!is_null(@$data['errors'])): ?>
-            <?php foreach ($data['errors'] as $error): ?>
-                <div class="alert alert-danger" role="alert">
-                    <?= $error ?>
-                </div>
-            <?php endforeach; ?>
+        <?php if (!empty($data['errors'])): ?>
+            <div class="alert alert-danger">
+                <ul>
+                    <?php foreach ($data['errors'] as $error): ?>
+                        <li><?= htmlspecialchars($error) ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
         <?php endif; ?>
 
         <form method="post" action="<?= $link->url('post.store') ?>" enctype="multipart/form-data">
+            <input type="hidden" name="category" value="<?= htmlspecialchars($data['category'] ?? '') ?>">
             <div class="form-group">
                 <label for="name">Názov príspevku</label>
                 <input type="text" class="form-control" id="name" name="name" required>
@@ -79,8 +82,8 @@
                 <input type="text" class="form-control" id="description" name="description" required>
             </div>
             <div class="form-group">
-                <label for="image">Obrázok</label>
-                <input type="file" class="form-control" id="image" name="image" accept="image/*" required>
+                <label for="gallery">Galéria</label>
+                <input type="file" id="gallery" name="gallery[]" class="form-control" multiple accept="image/*">
             </div>
             <button type="submit" class="btn btn-success btn-block">Uložiť</button>
         </form>

@@ -43,6 +43,10 @@
                        value="<?= @$address?->getStreet() ?>" required>
             </div>
             <div class="form-group">
+                <label for="descriptive_number" class="form-label">Popisné číslo</label>
+                <input type="text" class="form-control" id="descriptive_number" name="descriptive_number"
+                       value="<?= @$address?->getDescriptiveNumber() ?>" required>
+            <div class="form-group">
                 <label for="city" class="form-label">Mesto</label>
                 <input type="text" class="form-control" id="city" name="city"
                        value="<?= @$address?->getCity() ?>" required>
