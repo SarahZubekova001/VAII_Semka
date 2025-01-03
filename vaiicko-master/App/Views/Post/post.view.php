@@ -31,7 +31,7 @@ $title = $categoryNameMap[$data['category']] ?? 'Príspevky';
     <div class="row row-cols-1 row-cols-md-2 g-4">
         <?php foreach ($data['posts'] as $post): ?>
             <div class="col">
-                    <a class="image-box d-block" style="background-image: url('/public/uploads/<?= htmlspecialchars($post->getImagePath()?->getPath()) ?>'); background-size: cover; background-position: center; height: 250px;"></a>
+                    <a href="<?= $link->url('post.detail', ['id' => $post->getId()]) ?>" class="image-box d-block" style="background-image: url('/public/uploads/<?= htmlspecialchars($post->getImagePath()?->getPath()) ?>'); background-size: cover; background-position: center; height: 250px;"></a>
                     <h5 class="card-title"><?= htmlspecialchars($post->getName()) ?></h5>
                 <?php if ($auth->isLogged()): ?>
                     <input type="hidden" name="return_url" value="<?= htmlspecialchars($_SERVER['HTTP_REFERER'] ?? '') ?>">

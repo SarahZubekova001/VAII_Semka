@@ -8,23 +8,36 @@ use App\Core\Responses\Response;
 use App\Helpers\FileStorage;
 use App\Models\Address;
 use App\Models\Post;
+use Exception;
+
 class PostController extends AControllerBase {
 
     public function index(): Response
     {
         return $this->html(['posts' => Post::getAll()]);
     }
+
+    /**
+     * @throws HTTPException
+     * @throws Exception
+     */
     public function detail(): Response
     {
         $id = $this->request()->getValue('id');
-        $post = Post::getOne($id);
+        error_log("Načítané ID: $id");
 
+        $post = Post::getOne($id);
         if (!$post) {
+            error_log("Príspevok s ID $id nebol načítaný.");
             throw new HTTPException(404, "Príspevok nenájdený");
         }
 
-        return $this->html(['post' => $post]);
+        error_log("Načítaný príspevok: " . print_r($post, true));
+
+        return $this->html(['post' => $post], 'detail');
     }
+
+
 
     /**
      * Zobrazenie formulára na pridanie nového príspevku
@@ -38,7 +51,7 @@ class PostController extends AControllerBase {
     /**
      * Uloženie nového alebo aktualizácia existujúceho príspevku
      * @return Response
-     * @throws \Exception
+     * @throws Exception
      */
     public function store(): Response
     {
@@ -49,7 +62,7 @@ class PostController extends AControllerBase {
 
             $post = Post::getOne($id);
             if (!$post) {
-                throw new \Exception("Príspevok  nenájdeny");
+                throw new Exception("Príspevok  nenájdeny");
             }
             $oldImage = $post->getImagePath(); // Získaj cestu k starému obrázku
         } else {
@@ -104,7 +117,7 @@ class PostController extends AControllerBase {
     /**
      * Zobrazenie formulára na úpravu existujúceho príspevku
      * @return Response
-     * @throws \Exception
+     * @throws Exception
      */
     public function edit(): Response
     {
@@ -121,7 +134,7 @@ class PostController extends AControllerBase {
     /**
      * Vymazanie príspevku
      * @return Response
-     * @throws \Exception
+     * @throws Exception
      */
     public function delete(): Response
     {
@@ -191,8 +204,5 @@ class PostController extends AControllerBase {
 
         return $this->html(['posts' => $posts, 'season' => $season, 'category' => 'sport'], 'post');
     }
-
-
-
 
 }

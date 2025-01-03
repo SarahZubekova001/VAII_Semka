@@ -105,10 +105,15 @@ abstract class Model implements \JsonSerializable
     public static function getOne($id): ?static
     {
         if ($id == null) {
+            error_log("ID je null");
             return null;
         }
 
         self::connect();
+        error_log("SQL dotaz: SELECT * FROM `" . static::getTableName() . "` WHERE `" . static::getPkColumnName() . "`=?");
+        error_log("Parametre dotazu: " . print_r([$id], true));
+
+
         try {
             $sql = "SELECT * FROM `" . static::getTableName() . "` WHERE `" . static::getPkColumnName() . "`=?";
             $stmt = self::$connection->prepare($sql);
@@ -118,12 +123,18 @@ abstract class Model implements \JsonSerializable
             if ($model != null) {
                 $model->_dbId = $model->{static::getPkColumnName()};
             }
+            if ($model === null) {
+                error_log("Žiadny záznam nebol nájdený pre ID $id.");
+            } else {
+                error_log("Načítaný objekt: " . print_r($model, true));
+            }
             return $model;
         } catch (PDOException $e) {
             throw new \Exception('Query failed: ' . $e->getMessage(), 0, $e);
         }
-    }
 
+
+    }
     /**
      * Return DB connection, ready for custom developer use
      * @return null
