@@ -6,6 +6,7 @@ use App\Core\HTTPException;
 use App\Core\Responses\RedirectResponse;
 use App\Core\Responses\Response;
 use App\Helpers\FileStorage;
+use App\Models\Address;
 use App\Models\Post;
 class PostController extends AControllerBase {
 
@@ -63,15 +64,23 @@ class PostController extends AControllerBase {
         $opening_hours = $this->request()->getValue('opening_hours');
         //$post = $id ? Post::getOne($id) : new Post();
 
+
         if (!$post) {
             throw new HTTPException(404, "Príspevok nenájdený");
         }
+        $street = $this->request()->getValue('street');
+        $city = $this->request()->getValue('city');
+        $postalCode = (int)$this->request()->getValue('postal_code');
+        $descriptiveNumber = (int)$this->request()->getValue('descriptive_number');
+
+        $address = Address::findOrCreate($street, $city, $postalCode, $descriptiveNumber);
+
+        $post->setIdAddress($address->getId());
 
         $post->setName($name);
         $post->setDescription($description);
         $post->setCategory($category);
         $post->setSeason($season);
-        $post->setIdAddress($id_address);
         $post->setOpeningHours($opening_hours);
 
         $post->save();
@@ -80,13 +89,16 @@ class PostController extends AControllerBase {
         if (!empty($imageFile['name'])) {
             if ($oldImage) {
                 FileStorage::deleteFile($oldImage->getPath());
+                $oldImage->delete();
             }
             $newFileName = FileStorage::saveFile($imageFile);
             $post->setImagePath($newFileName);
         }
 
+        $returnUrl = $this->request()->getValue('return_url') ?? $_SERVER['HTTP_REFERER'] ?? $this->url('post.activity', ['season' => 'zima']);
+        return new RedirectResponse($returnUrl);
 
-        return new RedirectResponse($this->url('post.activity'));
+
     }
 
     /**
@@ -122,20 +134,65 @@ class PostController extends AControllerBase {
 
         $post->delete();
 
-        return new RedirectResponse($this->url('post.activity'));
+        $returnUrl = $this->request()->getValue('return_url');
+        if (!$returnUrl) {
+            $returnUrl = $this->url('post.activity', ['season' => 'zima']);
+        }
+
+        return new RedirectResponse($returnUrl);
     }
+
+    public function category(): Response
+    {
+        $category = $this->request()->getValue('category');
+
+        if (!in_array($category, ['activity', 'relax', 'sport'])) {
+            throw new HTTPException(404, "Kategória nenájdená");
+        }
+
+        $posts = Post::where('category', $category);
+        return $this->html([
+            'posts' => $posts,
+            'category' => $category
+        ], 'Post/post');
+    }
+
+
+
     public function activity(): Response
     {
-        $posts = Post::where('category', 'activity');
-        return $this->html(['posts' => $posts]);
+        $season = $this->request()->getValue('season') ?? 'zima'; // Predvolená sezóna
+        $posts = Post::where([
+            'category' => 'activity',
+            'season' => ['celorocne', $season] // Hľadaj "celoročné" alebo aktuálnu sezónu
+        ]);
+
+        return $this->html(['posts' => $posts, 'season' => $season, 'category' => 'activity'], 'post');
     }
+
     public function relax(): Response
     {
-        return $this->html();
+        $season = $this->request()->getValue('season') ?? 'zima'; // Predvolená sezóna
+        $posts = Post::where([
+            'category' => 'relax',
+            'season' => ['celorocne', $season] // Hľadaj "celoročné" alebo aktuálnu sezónu
+        ]);
+
+        return $this->html(['posts' => $posts, 'season' => $season, 'category' => 'relax'], 'post');
     }
 
     public function sport(): Response
     {
-        return $this->html();
+        $season = $this->request()->getValue('season') ?? 'zima'; // Predvolená sezóna
+        $posts = Post::where([
+            'category' => 'sport',
+            'season' => ['celorocne', $season] // Hľadaj "celoročné" alebo aktuálnu sezónu
+        ]);
+
+        return $this->html(['posts' => $posts, 'season' => $season, 'category' => 'sport'], 'post');
     }
+
+
+
+
 }

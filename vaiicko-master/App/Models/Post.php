@@ -69,9 +69,9 @@ class Post extends Model
         return $this->id_address;
     }
 
-    public function setIdAddress(?int $id_address): void
+    public function setIdAddress(?int $id): void
     {
-        $this->id_address = $id_address;
+        $this->id_address = $id;
     }
 
     public function getOpeningHours(): ?string
@@ -113,15 +113,43 @@ class Post extends Model
         $image->setPost($this);
         $image->save();
     }
-    public static function where(string $column, $value): array
+    public static function where($columnOrConditions, $value = null): array
     {
-        $db = \App\Core\DB\Connection::connect(); // Získajte spojenie s databázou
-        $stmt = $db->prepare("SELECT * FROM posts WHERE $column = :value");
-        $stmt->execute(['value' => $value]);
-        $results = $stmt->fetchAll(\PDO::FETCH_CLASS, self::class);
+        $db = \App\Core\DB\Connection::connect();
+        $query = "SELECT * FROM " . static::$tableName . " WHERE ";
+        $params = [];
+        $filters = [];
 
-        return $results;
+        if (is_array($columnOrConditions)) {
+            foreach ($columnOrConditions as $column => $value) {
+                if (is_array($value)) {
+                    $placeholders = implode(',', array_fill(0, count($value), '?'));
+                    $filters[] = "$column IN ($placeholders)";
+                    $params = array_merge($params, $value);
+                } else {
+                    $filters[] = "$column = ?";
+                    $params[] = $value;
+                }
+            }
+        } else {
+            if (is_array($value)) {
+                $placeholders = implode(',', array_fill(0, count($value), '?'));
+                $filters[] = "$columnOrConditions IN ($placeholders)";
+                $params = array_merge($params, $value);
+            } else {
+                $filters[] = "$columnOrConditions = ?";
+                $params[] = $value;
+            }
+        }
+
+        $query .= implode(" AND ", $filters);
+        $stmt = $db->prepare($query);
+        $stmt->execute($params);
+        return $stmt->fetchAll(\PDO::FETCH_CLASS, static::class);
     }
+
+
+
 
 
 }
