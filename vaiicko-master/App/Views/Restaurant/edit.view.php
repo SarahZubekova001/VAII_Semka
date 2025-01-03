@@ -64,9 +64,13 @@
             <div class="form-group">
                 <label for="image" class="form-label">Obrázok</label>
                 <?php if ($data['restaurant']?->getImagePath()?->getPath()): ?>
-                    <p>Aktuálny obrázok: <?= @$data['restaurant']->getImagePath()?->getPath() ?></p>
+                    <p>Aktuálny obrázok:</p>
+                    <<img src="/uploads/<?= htmlspecialchars($data['restaurant']->getImagePath()?->getPath()) ?>"
+                          alt="Obrázok reštaurácie"
+                          style="max-width: 100%; height: auto;">
+
                 <?php endif; ?>
-                <div class="input-group has-validation mb-4 ">
+                <div class="input-group has-validation mb-4 mt-2">
                     <input type="file" class="form-control" id="image" name="image" accept="image/*">
                 </div>
             </div>

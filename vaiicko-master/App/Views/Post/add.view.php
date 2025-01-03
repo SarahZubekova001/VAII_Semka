@@ -53,13 +53,26 @@
                 <label for="opening_hours">Otváracie hodiny</label>
                 <textarea class="form-control" id="opening_hours" name="opening_hours" rows="3" required></textarea>
             </div>
+            <!-- Sezóna ako výberové menu -->
             <div class="form-group">
                 <label for="season">Sezona</label>
-                <input type="text" class="form-control" id="season" name="season" required>
+                <select class="form-control" id="season" name="season" required>
+                    <option value="">Vyberte sezónu</option>
+                    <option value="leto">Leto</option>
+                    <option value="zima">Zima</option>
+                    <option value="celorocne">Celoročne</option>
+                </select>
             </div>
+
+            <!-- Kategória ako výberové menu -->
             <div class="form-group">
                 <label for="category">Kategória</label>
-                <input type="text" class="form-control" id="category" name="category" required>
+                <select class="form-control" id="category" name="category" required>
+                    <option value="">Vyberte kategóriu</option>
+                    <option value="activity">Aktivity</option>
+                    <option value="relax">Relax</option>
+                    <option value="sport">Šport</option>
+                </select>
             </div>
             <div class="form-group">
                 <label for="description">Opis</label>

@@ -69,17 +69,23 @@ class RestaurantController extends AControllerBase
         }
         $restaurant->setPhoneNumber((int) $phoneNumber);
 
-        $restaurant->save();
+        //$restaurant->save();
 
         $imageFile = $this->request()->getFiles()['image'] ?? null;
         if (!empty($imageFile['name'])) {
+            // 1. Vymaž starý obrázok zo súborového systému aj databázy
+            $oldImage = $restaurant->getImagePath();
             if ($oldImage) {
-                FileStorage::deleteFile($oldImage->getPath());
+                FileStorage::deleteFile($oldImage->getPath()); // Vymaž súbor
+                $oldImage->delete(); // Vymaž databázový záznam
             }
-            $newFileName = FileStorage::saveFile($imageFile);
-            $restaurant->setImagePath($newFileName);
+
+            // 2. Ulož nový obrázok
+            $newFileName = FileStorage::saveFile($imageFile); // Ulož nový súbor
+            $restaurant->setImagePath($newFileName); // Pridaj nový záznam obrázka
         }
 
+        $restaurant->save();
         if (count($formErrors) > 0) {
             // Ak sú chyby, vráť používateľovi formulár s chybami
             return $this->html(['errors' => $formErrors, 'restaurant' => $restaurant], $id > 0 ? 'edit' : 'add');

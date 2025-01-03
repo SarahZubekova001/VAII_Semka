@@ -32,17 +32,23 @@ class Restaurant extends Model
     public function getImagePath(): ?Image
     {
         $images = Image::getAll("restaurant_id  = ?", [$this->id]);
-        return $images[0] ?? null; // Vráti prvý obrázok alebo null, ak obrázky neexistujú
+        return end($images) ?: null;
     }
 
 
     public function setImagePath(string $path): void {
+        $existingImage = $this->getImagePath();
+        if ($existingImage) {
+            $existingImage->delete();
+        }
 
+        // Pridaj nový obrázok
         $image = new Image();
         $image->setPath($path);
-        $image->setRestaurant($this); // Prepojte obrázok s reštauráciou
+        $image->setRestaurant($this);
         $image->save();
     }
+
 
     public function getAddressId(): ?int
     {

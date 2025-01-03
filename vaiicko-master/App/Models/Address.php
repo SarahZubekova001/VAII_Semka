@@ -52,30 +52,39 @@ class Address extends \App\Core\Model {
     /**
      * @throws \Exception
      */
+    /**
+     * @throws \Exception
+     */
     public static function findOrCreate(string $street, string $city, int $postalCode, int $descriptive_number): Address
     {
-        $address = self::getAll("street = ? AND city = ? AND postal_code = ? AND descriptive_number = ?", [$street, $city, $postalCode, $descriptive_number]);
+        // Hľadanie existujúcej adresy
+        $existingAddresses = self::getAll("street = ? AND city = ? AND postal_code = ? AND descriptive_number = ?", [
+            $street, $city, $postalCode, $descriptive_number
+        ]);
 
+        // Ak existuje, vráťte prvú nájdenú adresu
+        if (!empty($existingAddresses)) {
+            return $existingAddresses[0];
+        }
 
-
-
+        // Ak neexistuje, vytvorte novú
         $newAddress = new self();
-
         $newAddress->setStreet($street);
         $newAddress->setCity($city);
         $newAddress->setPostalCode($postalCode);
         $newAddress->setDescriptiveNumber($descriptive_number);
 
+        // Uložte novú adresu do databázy
         $newAddress->save();
 
-        error_log("New Address ID after save: " . $newAddress->getId());
-
+        // Overte, či sa ID adresy správne vygenerovalo
         if (!$newAddress->getId()) {
             throw new \Exception("Failed to generate primary key for address.");
         }
 
         return $newAddress;
     }
+
 
 
 
