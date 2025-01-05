@@ -44,7 +44,7 @@ class Request
      */
     public function isContentTypeJSON(): bool
     {
-        return $_SERVER['CONTENT_TYPE'] == "application/json";
+        return isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE'] === "application/json";
     }
 
     /**
@@ -65,7 +65,13 @@ class Request
      */
     public function getRawBodyJSON(): mixed
     {
-        return json_decode(file_get_contents('php://input'), flags: JSON_THROW_ON_ERROR);
+        $rawBody = file_get_contents('php://input');
+
+        if (empty($rawBody)) {
+            throw new \JsonException('Prázdne telo požiadavky (JSON).');
+        }
+
+        return json_decode($rawBody, false, 512, JSON_THROW_ON_ERROR);
     }
 
     /**

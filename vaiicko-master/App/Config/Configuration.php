@@ -46,7 +46,8 @@ class Configuration
     /**
      * Class used as authenticator. Must implement IAuthenticator
      */
-    public const AUTH_CLASS = DummyAuthenticator::class;
+    const AUTH_CLASS = 'App\Auth\DatabaseAuthenticator';
+
     /**
      * Class used as error handler. Must implement IHandleError
      */

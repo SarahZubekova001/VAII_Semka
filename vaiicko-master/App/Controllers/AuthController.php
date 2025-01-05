@@ -4,8 +4,11 @@ namespace App\Controllers;
 
 use App\Config\Configuration;
 use App\Core\AControllerBase;
+use App\Core\Responses\JsonResponse;
 use App\Core\Responses\Response;
 use App\Core\Responses\ViewResponse;
+use App\Models\User;
+use JsonException;
 
 /**
  * Class AuthController
@@ -20,43 +23,56 @@ class AuthController extends AControllerBase
      */
     public function index(): Response
     {
-        return $this->redirect(Configuration::LOGIN_URL);
+        return $this->redirect('/auth/login');
     }
 
     /**
      * Login a user
-     * @return Response
+     * @return JsonResponse
+     * @throws JsonException
      */
     public function login(): Response
     {
+        $existingAdmin = User::getAll('username = ?', ['admin']);
+        if (empty($existingAdmin)) {
+            $user = new User();
+            $user->setUsername('admin');
+            $user->setPasswordHash(password_hash('admin123', PASSWORD_DEFAULT));
+            $user->save();
+
+            echo "Admin používateľ bol úspešne vytvorený.<br>";
+        }
+
         $formData = $this->app->getRequest()->getPost();
-        $currentUrl = $_SESSION['current_url'] ?? null;
         $logged = null;
 
         if (isset($formData['submit'])) {
+            // Použitie `DatabaseAuthenticator` na prihlásenie
             $logged = $this->app->getAuth()->login($formData['login'], $formData['password']);
             if ($logged) {
-                unset($_SESSION['current_url']);
-                return $this->redirect($currentUrl ?? $this->url("home.index"));
+                return $this->redirect($this->url("home.index")); // Presmerovanie na dashboard
             }
         }
 
+        // Vrátenie pohľadu s chybovou správou
         $data = ($logged === false ? ['message' => 'Zlý login alebo heslo!'] : []);
         return $this->html($data);
     }
 
-    public function showLoginForm(): Response
-    {
-        $_SESSION['current_url'] = $this->app->getRequest()->getReferer();
-        return $this->html();
-    }
-    /**
-     * Logout a user
-     * @return Response
-     */
+
     public function logout(): Response
     {
-        $this->app->getAuth()->logout();
-        return $this->redirect($this->url("home.index")); // Vráť na domovskú stránku
+        session_destroy();
+        return $this->redirect(Configuration::LOGIN_URL);
     }
+
+    public function showLoginForm(): Response
+    {
+        return $this->html(null, 'login');
+    }
+//    /**
+//     * Logout a user
+//     * @return Response
+//     */
+
 }

@@ -40,7 +40,7 @@
     </nav>
     <!-- Prihlásenie alebo Odhlásenie -->
     <a class="nav-link d-none d-lg-block position-absolute"
-       href="<?= $auth->isLogged() ? $link->url('auth.logout') : $link->url('auth.login') ?>"
+       href="<?= $auth->isLogged() ? $link->url('auth.logout') : $link->url('auth.showLoginForm') ?>"
        style=" right: 20px;">
         <?= $auth->isLogged() ? 'Odhlásenie' : 'Prihlásenie' ?>
     </a>
