@@ -1,45 +1,78 @@
-<?php
-/** @var \App\Core\LinkGenerator $link */
-?>
 <!DOCTYPE html>
+<html lang="sk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sprievodca</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="../../../public/css/style.css" >
-
+    <title>Sprievodca obcou Zuberec</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            position: relative;
+            background-image: url('/public/img/zuberec.webp'); /* Vymeniť za reálny obrázok */
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+        }
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        header h1 {
+            font-family: "Baskerville Old Face", serif;
+            position: relative;
+            font-size: 48px;
+            margin: 0;
+        }
+        header p {
+            position: relative;
+            font-size: 24px;
+            margin: 10px 0 0;
+        }
+        main {
+            padding: 20px;
+            text-align: center;
+        }
+        .cta {
+            margin: 20px 0;
+        }
+        .cta a {
+            font-family: "Baskerville Old Face", serif;
+            text-decoration: none;
+            color: white;
+            background-color: #007BFF;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
+        .cta a:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-
-<div class="container">
-    <a href="<?= $link->url('home.summer') ?>" class="section" id="summer">
-        <div class="text-overlay"></div>
-        <h2>LETO U NÁS</h2>
-    </a>
-    </a>
-    <a href="<?= $link->url('home.winter') ?>" class="section" id="winter">
-        <div class="text-overlay"></div>
-        <h2>ZIMA U NÁS</h2>
-    </a>
-    <a href="<?= $link->url('restaurant.restaurants') ?>" class="section" id="food">
-        <div class="text-overlay"></div>
-        <h2>REŠTAURACIE</h2>
-    </a>
-    <a href="<?= $link->url('home.info') ?>" class="section" id="info">
-        <div class="text-overlay"></div>
-        <h2>INFO</h2>
-    </a>
-</div>
-
-
-
-
-
-
-
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<header>
+    <h1>Vitajte na stránke Sprievodca obcou Zuberec</h1>
+</header>
+<main>
+    <p>Chcete zistiť, čo všetko sa nachádza v našej krásnej dedine? Preskúmajte zaujímavosti, históriu a miesta, ktoré stojí za to navštíviť.</p>
+    <div class="cta">
+        <a href="zaujimavosti.html">Kliknite tu</a>
+    </div>
+</main>
 </body>
 </html>

@@ -33,10 +33,6 @@ class HomeController extends AControllerBase
     }
 
 
-    public function spalena(): Response
-    {
-        return $this->html();
-    }
 
 
 
