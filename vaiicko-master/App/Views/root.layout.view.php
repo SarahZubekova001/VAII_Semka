@@ -39,11 +39,22 @@
         </div>
     </nav>
     <!-- Prihlásenie alebo Odhlásenie -->
-    <a class="nav-link d-none d-lg-block position-absolute"
-       href="<?= $auth->isLogged() ? $link->url('auth.logout') : $link->url('auth.showLoginForm') ?>"
-       style=" right: 20px;">
-        <?= $auth->isLogged() ? 'Odhlásenie' : 'Prihlásenie' ?>
-    </a>
+    <?php if ($auth->isLogged()): ?>
+        <a class="nav-link d-none d-lg-block position-absolute"
+           href="<?= $link->url('auth.logout', ['redirect' => urlencode($_SERVER['REQUEST_URI'])]) ?>"
+           style="right: 20px;">
+            Odhlásenie
+        </a>
+    <?php else: ?>
+        <a class="nav-link d-none d-lg-block position-absolute"
+           href="<?= $link->url('auth.showLoginForm', ['redirect' => urlencode($_SERVER['REQUEST_URI'])]) ?>"
+           style="right: 20px;">
+            Prihlásenie
+        </a>
+
+    <?php endif; ?>
+
+
 
 </nav>
 

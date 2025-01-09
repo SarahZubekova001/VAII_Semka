@@ -49,6 +49,5 @@ class User extends Model
     {
         $this->passwordSalt = $passwordSalt;
     }
-//
 
 }

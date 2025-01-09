@@ -33,39 +33,36 @@ class AuthController extends AControllerBase
      */
     public function login(): Response
     {
-        $existingAdmin = User::getAll('username = ?', ['admin']);
-        if (empty($existingAdmin)) {
-            $user = new User();
-            $user->setUsername('admin');
-            $user->setPasswordHash(password_hash('admin123', PASSWORD_DEFAULT));
-            $user->save();
-
-            echo "Admin používateľ bol úspešne vytvorený.<br>";
-        }
-
         $formData = $this->app->getRequest()->getPost();
-        $logged = null;
 
-        if (isset($formData['submit'])) {
-            // Použitie `DatabaseAuthenticator` na prihlásenie
+        if (isset($formData['login'], $formData['password'])) {
             $logged = $this->app->getAuth()->login($formData['login'], $formData['password']);
+
             if ($logged) {
-                return $this->redirect($this->url("home.index")); // Presmerovanie na dashboard
+                return $this->json([
+                    'success' => true,
+                    'redirect' => $this->url("home.index")
+                ]);
+            } else {
+                return $this->json([
+                    'success' => false,
+                    'message' => 'Zlý login alebo heslo!'
+                ]);
             }
         }
 
-        // Vrátenie pohľadu s chybovou správou
-        $data = ($logged === false ? ['message' => 'Zlý login alebo heslo!'] : []);
-        return $this->html($data);
+        return $this->json([
+            'success' => false,
+            'message' => 'Neplatná požiadavka alebo chýbajúce údaje.'
+        ]);
     }
 
-
-    public function logout(): Response
-    {
+    public function logout(): Response {
         session_destroy();
-        return $this->redirect(Configuration::LOGIN_URL);
-    }
 
+        // Presmerovanie na prihlasovaciu stránku
+        return $this->redirect('/?c=home&a=index');
+    }
     public function showLoginForm(): Response
     {
         return $this->html(null, 'login');
