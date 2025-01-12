@@ -1,0 +1,87 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url('/public/img/zuberec.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    color: white;
+    text-align: center;
+    overflow: hidden;
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 0;
+}
+
+.content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    padding: 200px;
+}
+
+.top-content {
+    text-align: center;
+    margin-top: 0;
+}
+
+.bottom-content {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.cta a {
+    font-family: "Baskerville Old Face", serif;
+    text-decoration: none;
+    color: white;
+    background-color: #007BFF;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 18px;
+    transition: background-color 0.3s;
+}
+
+.cta a:hover {
+    background-color: #0056b3;
+}
+
+/* Mediálne dotazy pre menšie obrazovky */
+@media (max-width: 768px) {
+    .content {
+        padding: 10px;
+        justify-content: center; /* Zarovnanie všetkého do stredu */
+        height: 100%;
+    }
+
+    .top-content h1 {
+        font-size: 24px; /* Menšie písmo pre nadpis */
+        line-height: 1.2;
+    }
+
+    .bottom-content p {
+        font-size: 14px; /* Menšie písmo pre text */
+        line-height: 1.4;
+    }
+
+    .cta a {
+        font-size: 16px; /* Menšie tlačidlo */
+        padding: 8px 16px;
+    }
+}
