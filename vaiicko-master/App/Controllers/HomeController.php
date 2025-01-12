@@ -16,6 +16,10 @@ class HomeController extends AControllerBase
             ]
         );
     }
+    public function home(): Response
+    {
+        return $this->html();
+    }
 
     public function info(): Response
     {
