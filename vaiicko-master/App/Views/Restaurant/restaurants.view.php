@@ -17,12 +17,19 @@
 
 <div class="container mt-4">
     <h1 class="text-center mb-5">Reštaurácie</h1>
+
     <?php if ($auth->isLogged()): ?>
     <div class="text-center mt-1">
         <a href="<?= $link->url('restaurant.add') ?>" class="btn btn-primary">Pridať novú reštauráciu</a>
+
     </div>
+        <div class="text-center mt-1">
+            <label for="search">
+                <input type="text" id="search" class="form-control" placeholder="Hľadajte reštauráciu ...">
+            </label>
+        </div>
     <?php endif; ?>
-    <div class="row row-cols-1 row-cols-md-2 g-4">
+    <div id="restaurants-container" class="row row-cols-1 row-cols-md-2 g-4">
         <?php foreach ($data['restaurants'] as $restaurant): ?>
             <div class="col">
             <div class="card h-100" >
@@ -47,5 +54,23 @@
     </div>
 
 </div>
+<script>
+    document.getElementById('search').addEventListener('input', function () {
+        const query = this.value;
+
+        fetch(`/?c=restaurant&a=filter&query=${encodeURIComponent(query)}`, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+            .then(response => response.text()) // Parse the response as text
+            .then(data => {
+                document.getElementById('restaurants-container').innerHTML = data; // Directly insert the HTML fragment
+            })
+            .catch(error => console.error('Chyba:', error));
+    });
+
+</script>
+
 </body>
 </html>

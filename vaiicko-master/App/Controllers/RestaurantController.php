@@ -182,6 +182,20 @@ class RestaurantController extends AControllerBase
             return new RedirectResponse($this->url('restaurant.restaurants'));
         }
     }
+    public function filter(): Response
+    {
+        $query = $this->request()->getValue('query');
+        $restaurants = [];
+
+        if (!empty($query)) {
+            $restaurants = Restaurant::getAll("name LIKE ?", ["%$query%"]);
+        } else {
+            $restaurants = Restaurant::getAll();
+        }
+
+        return $this->html(['restaurants' => $restaurants], 'partial');
+    }
+
 
 
 

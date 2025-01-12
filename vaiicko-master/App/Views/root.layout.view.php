@@ -19,44 +19,42 @@
 </head>
 <body>
 
-<nav class="navbar" style="background-color: #e3f2fd; position: relative;">
-    <nav class="navbar navbar-expand-lg">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="<?= $link->url('home.index') ?>">Home</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
-                    aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <!-- Navigačné odkazy -->
-                <div class="navbar-nav">
-                    <a class="nav-link active" href="<?= $link->url('home.winter') ?>">Zima</a>
-                    <a class="nav-link active" href="<?= $link->url('home.summer') ?>">Leto</a>
-                    <a class="nav-link active" href="<?= $link->url('restaurant.restaurants') ?>">Reštaurácie</a>
-                    <a class="nav-link active" href="<?= $link->url('home.info') ?>">Info</a>
+<?php if (empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest'): ?>
+    <nav class="navbar" style="background-color: #e3f2fd; position: relative;">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="<?= $link->url('home.home') ?>">Home</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <!-- Navigačné odkazy -->
+                    <div class="navbar-nav">
+                        <a class="nav-link active" href="<?= $link->url('home.winter') ?>">Zima</a>
+                        <a class="nav-link active" href="<?= $link->url('home.summer') ?>">Leto</a>
+                        <a class="nav-link active" href="<?= $link->url('restaurant.restaurants') ?>">Reštaurácie</a>
+                        <a class="nav-link active" href="<?= $link->url('home.info') ?>">Info</a>
+                    </div>
                 </div>
             </div>
-        </div>
+        </nav>
+        <!-- Prihlásenie alebo Odhlásenie -->
+        <?php if ($auth->isLogged()): ?>
+            <a class="nav-link d-none d-lg-block position-absolute"
+               href="<?= $link->url('auth.logout', ['redirect' => urlencode($_SERVER['REQUEST_URI'])]) ?>"
+               style="right: 20px;">
+                Odhlásenie
+            </a>
+        <?php else: ?>
+            <a class="nav-link d-none d-lg-block position-absolute"
+               href="<?= $link->url('auth.showLoginForm', ['redirect' => urlencode($_SERVER['REQUEST_URI'])]) ?>"
+               style="right: 20px;">
+                Prihlásenie
+            </a>
+        <?php endif; ?>
     </nav>
-    <!-- Prihlásenie alebo Odhlásenie -->
-    <?php if ($auth->isLogged()): ?>
-        <a class="nav-link d-none d-lg-block position-absolute"
-           href="<?= $link->url('auth.logout', ['redirect' => urlencode($_SERVER['REQUEST_URI'])]) ?>"
-           style="right: 20px;">
-            Odhlásenie
-        </a>
-    <?php else: ?>
-        <a class="nav-link d-none d-lg-block position-absolute"
-           href="<?= $link->url('auth.showLoginForm', ['redirect' => urlencode($_SERVER['REQUEST_URI'])]) ?>"
-           style="right: 20px;">
-            Prihlásenie
-        </a>
-
-    <?php endif; ?>
-
-
-
-</nav>
+<?php endif; ?>
 
 <div class="container-fluid mt-3">
     <div class="web-content">

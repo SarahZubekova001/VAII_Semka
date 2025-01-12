@@ -41,7 +41,7 @@ class AuthController extends AControllerBase
             if ($logged) {
                 return $this->json([
                     'success' => true,
-                    'redirect' => $this->url("home.index")
+                    'redirect' => $this->url("home.home")
                 ]);
             } else {
                 return $this->json([
@@ -59,9 +59,7 @@ class AuthController extends AControllerBase
 
     public function logout(): Response {
         session_destroy();
-
-        // Presmerovanie na prihlasovaciu stránku
-        return $this->redirect('/?c=home&a=index');
+        return $this->redirect('/?c=home&a=home');
     }
     public function showLoginForm(): Response
     {

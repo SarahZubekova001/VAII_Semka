@@ -91,4 +91,10 @@ class Restaurant extends Model
         return Address::getOne($this->id_address);
     }
 
+    public static function filterByName(string $query): array
+    {
+        $likeQuery = '%' . $query . '%';
+        return self::getAll("name LIKE ?", [$likeQuery]);
+    }
+
 }

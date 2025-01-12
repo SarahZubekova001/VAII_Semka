@@ -1,39 +1,35 @@
-var slideIndex = 1;
+document.addEventListener('DOMContentLoaded', function () {
+    const logoutButton = document.querySelector('.nav-link[href*="auth.logout"]');
 
-// Po načítaní DOM inicializuj slider
-document.addEventListener("DOMContentLoaded", () => {
-    showSlides(slideIndex);
+    if (logoutButton) {
+        logoutButton.addEventListener('click', function (event) {
+            event.preventDefault(); // Zabránime predvolenému chovaniu odkazu
+
+            fetch(logoutButton.href, {
+                method: 'POST', // Používame POST
+                headers: {
+                    'Content-Type': 'application/json' // Nastavujeme hlavičku
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = '/?c=auth&a=login'; // Presmerovanie na login stránku
+                    } else {
+                        alert(data.message || 'Nastala chyba pri odhlasovaní.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Chyba:', error);
+                    alert('Nastala chyba pri spracovaní požiadavky.');
+                });
+        });
+    }
 });
 
-function plusSlides(n) {
-    showSlides(slideIndex += n);
-}
-
-function currentSlide(n) {
-    showSlides(slideIndex = n);
-}
-function showSlides(n) {
-    let i;
-    let slides = document.getElementsByClassName("mySlides");
-    let dots = document.getElementsByClassName("dot");
-
-    if (n > slides.length) {
-        slideIndex = 1;
-    }
-
-    if (n < 1) {
-        slideIndex = slides.length;
-    }
 
 
-    for (i = 0; i < slides.length; i++) {
-        slides[i].style.display = "none";
-    }
 
 
-    for (i = 0; i < dots.length; i++) {
-        dots[i].className = dots[i].className.replace(" active", "");
-    }
-    slides[slideIndex - 1].style.display = "block";
-    dots[slideIndex - 1].className += " active";
-}
+
+
