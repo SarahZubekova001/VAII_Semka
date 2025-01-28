@@ -1,3 +1,6 @@
+<?php
+/** @var \App\Core\LinkGenerator $link */
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,8 +12,6 @@
 </head>
 <body>
 
-
-<!-- Obsah -->
 <div class="container">
     <a href="<?= $link->url('post.activity', ['season' => 'zima']) ?>" class="section" id="aktivity">
         <div class="text-overlay"></div>

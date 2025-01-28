@@ -1,4 +1,9 @@
-
+<?php
+/** @var \App\Models\Restaurant[] $restaurants */
+/** @var \App\Core\LinkGenerator $link */
+/** @var Array $data */
+/** @var \App\Core\Auth $auth */
+?>
 <?php foreach ($data['restaurants'] as $restaurant): ?>
     <div class="col">
         <div class="card h-100">
@@ -9,6 +14,11 @@
                 <h5 class="card-title"><?= htmlspecialchars($restaurant->getName()) ?></h5>
                 <p class="card-text">
                     <?= htmlspecialchars($restaurant->getAddressDetails()->getStreet().', ' . $restaurant->getAddressDetails()->getCity()) ?>
+                </p>
+                <p class="card-text">
+                    <a href = '<?= htmlspecialchars($restaurant->getUrlAddress()) ?>'>
+                        <?= htmlspecialchars($restaurant->getUrlAddress()) ?>
+                    </a>
                 </p>
                 <?php if ($auth->isLogged()): ?>
                     <div class="d-flex justify-content-center gap-2">

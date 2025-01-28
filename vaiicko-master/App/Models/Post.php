@@ -104,7 +104,7 @@ class Post extends Model
     public function getImagePath(): ?Image
     {
         $images = Image::getAll("post_id  = ?", [$this->id]);
-        return $images[0] ?? null; // Vráti prvý obrázok alebo null, ak obrázky neexistujú
+        return $images[0] ?? null;
     }
     public function setImagePath(string $path): void {
 
@@ -150,16 +150,21 @@ class Post extends Model
 
     public function getGallery(): array
     {
-        return Image::getAll("post_id = ?", [$this->id]); // Vráti všetky obrázky priradené k príspevku
+        return Image::getAll("post_id = ?", [$this->id]);
     }
 
     public function addImageToGallery(string $path): void
     {
-        $gallery = new Image();
-        $gallery->setPath($path);
-        $gallery->setPost($this);
-        $gallery->save();
+        if (!$this->getId()) {
+            $this->save(); // Uloží príspevok, ak ešte nemá ID
+        }
+
+        $image = new Image();
+        $image->setPath($path);
+        $image->setPostId($this->getId());
+        $image->save();
     }
+
 
 
 

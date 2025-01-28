@@ -12,7 +12,6 @@
 </head>
 <body>
 
-<!-- Obsah -->
 <div class="container">
     <a href="<?= $link->url('post.activity', ['season' => 'leto']) ?>" class="section" id="aktivity">
         <div class="text-overlay"></div>

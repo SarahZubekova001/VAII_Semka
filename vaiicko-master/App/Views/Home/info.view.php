@@ -12,21 +12,17 @@
 
 <div class="slideshow-container">
     <div class="mySlides Myfade ">
-<!--        <div class="numbertext">1 / 3</div>-->
         <img src="../../../public/img/zuberec.jpg" style="width:100%">
     </div>
 
     <div class="mySlides Myfade">
-<!--        <div class="numbertext">2 / 3</div>-->
         <img src="../../../public/img/zuberec.webp" style="width:100%">
     </div>
 
     <div class="mySlides Myfade">
-<!--        <div class="numbertext">3 / 3</div>-->
         <img src="../../../public/img/zuberec2.jpg" style="width:100%">
     </div>
 
-    <!-- Next and previous buttons -->
     <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
     <a class="next" onclick="plusSlides(1)">&#10095;</a>
 </div>
@@ -88,7 +84,44 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<script src="../../../public/js/script.js" defer></script>
+<script >
+    let slideIndex = 1;
+    document.addEventListener("DOMContentLoaded", () => {
+        showSlides(slideIndex);
+    });
+
+    function plusSlides(n) {
+        showSlides(slideIndex += n);
+    }
+
+    function currentSlide(n) {
+        showSlides(slideIndex = n);
+    }
+    function showSlides(n) {
+        let i;
+        let slides = document.getElementsByClassName("mySlides");
+        let dots = document.getElementsByClassName("dot");
+
+        if (n > slides.length) {
+            slideIndex = 1;
+        }
+
+        if (n < 1) {
+            slideIndex = slides.length;
+        }
+
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+
+        for (i = 0; i < dots.length; i++) {
+            dots[i].className = dots[i].className.replace(" active", "");
+        }
+        slides[slideIndex - 1].style.display = "block";
+        dots[slideIndex - 1].className += " active";
+    }
+
+</script>
 
 </body>
 </html>
