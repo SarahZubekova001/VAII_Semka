@@ -3,18 +3,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (logoutButton) {
         logoutButton.addEventListener('click', function (event) {
-            event.preventDefault(); // Zabránime predvolenému chovaniu odkazu
+            event.preventDefault();
 
             fetch(logoutButton.href, {
-                method: 'POST', // Používame POST
+                method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json' // Nastavujeme hlavičku
+                    'Content-Type': 'application/json'
                 }
             })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        window.location.href = '/?c=auth&a=login'; // Presmerovanie na login stránku
+                        window.location.href = '/?c=auth&a=login';
                     } else {
                         alert(data.message || 'Nastala chyba pri odhlasovaní.');
                     }

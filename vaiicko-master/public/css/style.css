@@ -20,7 +20,7 @@ body, html {
     overflow: hidden; /* Aby zväčšenie nepresahovalo sekciu */
     cursor: pointer;
     transition: transform 0.3s ease; /* Hladký efekt zväčšenia */
-    text-decoration: none; /* Odstránenie podčiarknutia textu */
+    text-decoration: none;
     color: white;
 
 }
@@ -31,7 +31,7 @@ body, html {
 
 .section h2 {
     position: relative;
-    z-index: 2; /* Text nad prekrytím */
+    z-index: 2;
     margin: 0;
     padding: 10px;
     text-align: center;
@@ -42,7 +42,7 @@ body, html {
     position: absolute;
     top: 50%;
     left: 0;
-    transform: translateY(-50%); /* Korekcia na presné zarovnanie stredu */
+    transform: translateY(-50%);
     width: 100%;
     background: rgba(0, 0, 0, 0.6);
     height: 50px;
@@ -83,6 +83,7 @@ body, html {
     background: url('../img/sport.jpg') no-repeat center center;
     background-size: cover;
 }
+
 
 /* Mobile styles */
 @media (max-width: 990px) {

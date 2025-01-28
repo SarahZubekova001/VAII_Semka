@@ -11,8 +11,6 @@
     height: 500px;
     object-fit: cover;
 }
-
-/* Next & previous buttons */
 .prev, .next {
     cursor: pointer;
     position: absolute;
@@ -56,8 +54,8 @@
 }
 
 .dot.active {
-    background-color: #717171; /* Farba pre aktívnu guličku */
-    transform: scale(1.2); /* Zvýraznenie pomocou mierneho zväčšenia */
+    background-color: #717171;
+    transform: scale(1.2);
 }
 
 
