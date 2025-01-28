@@ -24,16 +24,10 @@ class PostController extends AControllerBase {
     public function detail(): Response
     {
         $id = $this->request()->getValue('id');
-        error_log("Načítané ID: $id");
-
         $post = Post::getOne($id);
         if (!$post) {
-            error_log("Príspevok s ID $id nebol načítaný.");
             throw new HTTPException(404, "Príspevok nenájdený");
         }
-
-        error_log("Načítaný príspevok: " . print_r($post, true));
-
         return $this->html(['post' => $post], 'detail');
     }
 
@@ -66,48 +60,60 @@ class PostController extends AControllerBase {
         $street = $this->request()->getValue('street');
         $city = $this->request()->getValue('city');
         $postalCode = $this->request()->getValue('postal_code');
-        $descriptiveNumberValue = $this->request()->getValue('descriptive_number');
+        $descriptiveNumber = $this->request()->getValue('descriptive_number');
 
-        // Pridanie validačných chýb
+
+        $post->setName($name);
+        $post->setDescription($description);
+        $post->setCategory($category);
+        $post->setSeason($season);
+        $post->setOpeningHours($opening_hours);
+        $address = Address::findOrCreate($street, $city, $postalCode, $descriptiveNumber);
+        $post->setIdAddress($address->getId());
+
+        $imageFiles = $this->request()->getFiles()['image'] ?? [];
+
+        if (is_array($imageFiles['tmp_name'])) {
+            foreach ($imageFiles['tmp_name'] as $index => $tmpName) {
+                if (!empty($imageFiles['name'][$index]) && is_string($tmpName)) {
+                    $newFileName = FileStorage::saveFile([
+                        'name' => $imageFiles['name'][$index],
+                        'tmp_name' => $tmpName
+                    ]);
+                    $post->addImageToGallery($newFileName);
+                }
+            }
+        } elseif (!empty($imageFiles['name']) && is_string($imageFiles['tmp_name'])) {
+            // Ak je len jeden súbor, nahrá ho normálne
+            $newFileName = FileStorage::saveFile($imageFiles);
+            $post->setImagePath($newFileName);
+        }
+////        foreach ($imageFile['tmp_name'] as $index => $tmpName) {
+//            if (!empty($imageFile['name'])) {
+//                $oldImage = $post->getImagePath();
+//                if ($oldImage) {
+//                    FileStorage::deleteFile($oldImage->getPath());
+//                    $oldImage->delete();
+//                }
+//
+//                $newFileName = FileStorage::saveFile($imageFile);
+//                $post->setImagePath($newFileName);
+//            }
+////            if (!empty($imageFiles['name'][$index])) {
+////                $newFileName = FileStorage::saveFile($tmpName);
+////                $post->addImageToGallery($newFileName);
+////            }
+////        }
+
+        $post->save();
+
         $formErrors = [];
-
-        if (empty($name)) {
-            $formErrors[] = "Pole 'Názov' je povinné!";
-        }
-        if (empty($description)) {
-            $formErrors[] = "Pole 'Popis' je povinné!";
-        }
-        if (!is_numeric($descriptiveNumberValue)) {
-            $formErrors[] = "Popisné číslo musí byť číselné!";
-        } else {
-            $descriptiveNumber = (int) $descriptiveNumberValue;
-        }
-        if (!is_numeric($postalCode)) {
-            $formErrors[] = "PSC číslo musí byť číselné!";
-        } else {
-            $postalCode = (int) $postalCode;
-        }
-
-        // Ak sú chyby, vrátiť formulár s chybami
         if (!empty($formErrors)) {
             return $this->html([
                 'errors' => $formErrors,
                 'post' => $post
             ], $id ? 'edit' : 'add');
         }
-
-        // Pokračovanie v spracovaní
-        $post->setName($name);
-        $post->setDescription($description);
-        $post->setCategory($category);
-        $post->setSeason($season);
-        $post->setOpeningHours($opening_hours);
-
-        $address = Address::findOrCreate($street, $city, $postalCode, $descriptiveNumber);
-        $post->setIdAddress($address->getId());
-
-        $post->save();
-
         return new RedirectResponse($this->url('post.category', ['category' => $category]));
     }
 
@@ -151,7 +157,7 @@ class PostController extends AControllerBase {
         }
 
         // Overenie PSČ
-        $postalCode = $this->request()->getValue('postal_code');
+
         if (empty($postalCode)) {
             $errors[] = "Pole 'PSČ' je povinné!";
         } elseif (!is_numeric($postalCode)) {
@@ -159,7 +165,7 @@ class PostController extends AControllerBase {
         }
 
         // Overenie popisného čísla
-        $descriptiveNumber = $this->request()->getValue('descriptive_number');
+
         if (empty($descriptiveNumber)) {
             $errors[] = "Pole 'Popisné číslo' je povinné!";
         } elseif (!is_numeric($descriptiveNumber)) {
@@ -168,7 +174,6 @@ class PostController extends AControllerBase {
 
         // Overenie obrázka
         $allowedMimeTypes = ['image/jpeg', 'image/png'];
-        $imageFile = $this->request()->getFiles()['image'] ?? null;
         if (!empty($imageFile['name'])) {
             if (!in_array($imageFile['type'], $allowedMimeTypes)) {
                 $errors[] = "Obrázok musí byť vo formáte JPG alebo PNG!";
@@ -182,13 +187,6 @@ class PostController extends AControllerBase {
         return $errors;
     }
 
-
-
-    /**
-     * Zobrazenie formulára na úpravu existujúceho príspevku
-     * @return Response
-     * @throws Exception
-     */
     public function edit(): Response
     {
         $id = $this->request()->getValue('id');
@@ -201,11 +199,6 @@ class PostController extends AControllerBase {
         return $this->html(['post' => $post]);
     }
 
-    /**
-     * Vymazanie príspevku
-     * @return Response
-     * @throws Exception
-     */
     public function delete(): Response
     {
         $id = $this->request()->getValue('id');
@@ -213,9 +206,13 @@ class PostController extends AControllerBase {
 
         if (!$post) {
             throw new HTTPException(404, "Príspevok nenájdený");
-        }
-
-        $post->delete();
+        } else {
+            $image = $post->getImagePath();
+            if ($image) {
+                FileStorage::deleteFile($image->getPath());
+                $image->delete();
+            }
+        } $post->delete();
 
         $returnUrl = $this->request()->getValue('return_url');
         if (!$returnUrl) {
@@ -239,15 +236,12 @@ class PostController extends AControllerBase {
             'category' => $category
         ], 'post');
     }
-
-
-
     public function activity(): Response
     {
-        $season = $this->request()->getValue('season') ?? 'zima'; // Predvolená sezóna
+        $season = $this->request()->getValue('season') ?? 'zima';
         $posts = Post::where([
             'category' => 'activity',
-            'season' => ['celorocne', $season] // Hľadaj "celoročné" alebo aktuálnu sezónu
+            'season' => ['celorocne', $season]
         ]);
 
         return $this->html(['posts' => $posts, 'season' => $season, 'category' => 'activity'], 'post');
@@ -255,10 +249,10 @@ class PostController extends AControllerBase {
 
     public function relax(): Response
     {
-        $season = $this->request()->getValue('season') ?? 'zima'; // Predvolená sezóna
+        $season = $this->request()->getValue('season') ?? 'zima';
         $posts = Post::where([
             'category' => 'relax',
-            'season' => ['celorocne', $season] // Hľadaj "celoročné" alebo aktuálnu sezónu
+            'season' => ['celorocne', $season]
         ]);
 
         return $this->html(['posts' => $posts, 'season' => $season, 'category' => 'relax'], 'post');
@@ -266,10 +260,10 @@ class PostController extends AControllerBase {
 
     public function sport(): Response
     {
-        $season = $this->request()->getValue('season') ?? 'zima'; // Predvolená sezóna
+        $season = $this->request()->getValue('season') ?? 'zima';
         $posts = Post::where([
             'category' => 'sport',
-            'season' => ['celorocne', $season] // Hľadaj "celoročné" alebo aktuálnu sezónu
+            'season' => ['celorocne', $season]
         ]);
 
         return $this->html(['posts' => $posts, 'season' => $season, 'category' => 'sport'], 'post');

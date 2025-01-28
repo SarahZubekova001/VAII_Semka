@@ -12,6 +12,7 @@ class Restaurant extends Model
     protected ?string $opening_hours;
     protected ?string $author;
     protected ?int $phone_number;
+    protected ?string $url_address;
     protected static string $tableName = 'restaurants';
 
     public function getId(): ?int
@@ -41,11 +42,12 @@ class Restaurant extends Model
         if ($existingImage) {
             $existingImage->delete();
         }
-
-        // Pridaj nový obrázok
+        if (!$this->getId()) {
+            $this->save(); // Uloží príspevok, ak ešte nemá ID
+        }
         $image = new Image();
         $image->setPath($path);
-        $image->setRestaurant($this);
+        $image->setRestaurantId($this->getId());
         $image->save();
     }
 
@@ -89,6 +91,14 @@ class Restaurant extends Model
     public function getAddressDetails(): ?Address
     {
         return Address::getOne($this->id_address);
+    }
+    public function getUrlAddress(): ?string
+    {
+        return $this->url_address;
+    }
+    public function setUrlAddress(string $website): void
+    {
+        $this->url_address = $website;
     }
 
     public static function filterByName(string $query): array

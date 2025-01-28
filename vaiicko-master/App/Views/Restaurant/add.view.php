@@ -57,6 +57,10 @@
                 <label for="phone_number">Telefónne číslo</label>
                 <input type="text" class="form-control" id="phone_number" name="phone_number" required>
             </div>
+            <div class="form-group">
+                <label for="url_address">Webová adresa</label>
+                <input type="text" class="form-control" id="url_address" name="url_address" required>
+            </div>
 
             <div class="form-group">
                 <label for="image">Obrázok</label>

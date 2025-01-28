@@ -17,19 +17,19 @@
 
 <div class="container mt-4">
     <h1 class="text-center mb-5">Reštaurácie</h1>
-
+    <div class="text-center mt-1">
+        <label for="search">
+            <input type="text" id="search" class="form-control" placeholder="Hľadajte reštauráciu ...">
+        </label>
+    </div>
     <?php if ($auth->isLogged()): ?>
     <div class="text-center mt-1">
         <a href="<?= $link->url('restaurant.add') ?>" class="btn btn-primary">Pridať novú reštauráciu</a>
 
     </div>
-        <div class="text-center mt-1">
-            <label for="search">
-                <input type="text" id="search" class="form-control" placeholder="Hľadajte reštauráciu ...">
-            </label>
-        </div>
+
     <?php endif; ?>
-    <div id="restaurants-container" class="row row-cols-1 row-cols-md-2 g-4">
+    <div id="restaurants-container" class="row row-cols-1 row-cols-md-2 g-4" style="width: 100%;">
         <?php foreach ($data['restaurants'] as $restaurant): ?>
             <div class="col">
             <div class="card h-100" >
@@ -39,7 +39,13 @@
                     <div class="card-body text-center">
                         <h5 class="card-title"><?= htmlspecialchars($restaurant->getName()) ?></h5>
                         <p class="card-text">
-                            <?= htmlspecialchars($restaurant->getAddressDetails()->getStreet().', ' . $restaurant->getAddressDetails()->getCity()) ?>
+                             <?= htmlspecialchars($restaurant->getAddressDetails()->getStreet().', ' . $restaurant->getAddressDetails()->getCity()) ?>
+
+                        </p>
+                        <p class="card-text">
+                            <a href = '<?= htmlspecialchars($restaurant->getUrlAddress()) ?>'>
+                                <?= htmlspecialchars($restaurant->getUrlAddress()) ?>
+                            </a>
                         </p>
                         <?php if ($auth->isLogged()): ?>
                             <div class="d-flex justify-content-center gap-2">
@@ -63,9 +69,9 @@
                 'X-Requested-With': 'XMLHttpRequest'
             }
         })
-            .then(response => response.text()) // Parse the response as text
+            .then(response => response.text())
             .then(data => {
-                document.getElementById('restaurants-container').innerHTML = data; // Directly insert the HTML fragment
+                document.getElementById('restaurants-container').innerHTML = data;
             })
             .catch(error => console.error('Chyba:', error));
     });

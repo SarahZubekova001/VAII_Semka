@@ -44,8 +44,20 @@ class ImageController extends AControllerBase
      */
     public function add(): Response
     {
-        return $this->html();
+        $postId = $this->request()->getValue('post_id');
+        if (!$postId) {
+            throw new HTTPException(400, "Chýbajúce ID príspevku");
+        }
+
+        $post = Post::getOne($postId);
+        if (!$post) {
+            throw new HTTPException(404, "Príspevok nenájdený");
+        }
+
+        $imageFiles = $this->request()->getFiles()['image'] ?? null;
+        return new RedirectResponse($this->url('gallery.index', ['post_id' => $postId]));
     }
+
 
     /**
      * Uloženie nového alebo aktualizácia existujúceho obrázka

@@ -62,6 +62,10 @@
                        value="<?= @$data['restaurant']?->getPhoneNumber() ?>" required>
             </div>
             <div class="form-group">
+                <label for="url_address" class="form-label">Webová adresa</label>
+                <input type="text" class="form-control" id="url_address" name="url_address"
+                       value="<?= @$data['restaurant']?->getUrlAddress() ?>" required>
+            <div class="form-group">
                 <label for="image" class="form-label">Obrázok</label>
                 <?php if ($data['restaurant']?->getImagePath()?->getPath()): ?>
                     <p>Aktuálny obrázok:</p>

@@ -21,19 +21,36 @@ class Image extends Model {
         $this->path = $path;
     }
 
-    public function getRestaurant(): ?Restaurant {
-        return $this->restaurant_id ? Restaurant::getOne($this->restaurant_id) : null;
-    }
-
     public function setRestaurant(?Restaurant $restaurant): void {
         $this->restaurant_id = $restaurant?->getId();
     }
 
-    public function getPost(): ?Post {
-        return $this->post_id ? Post::getOne($this->post_id) : null;
+    public function getPostId(): ?int
+    {
+        return $this->post_id;
+    }
+    public function setPostId(?int $postId): void
+    {
+        $this->post_id = $postId;
+    }
+    public function setRestaurantId(?int $restaurantId): ?int
+    {
+        return $this->restaurant_id = $restaurantId;
+    }
+    public function getRestaurantId(): ?int
+    {
+        return $this->restaurant_id;
     }
 
     public function setPost(?Post $post): void {
         $this->post_id = $post?->getId();
     }
+    public function getGallery(): array {
+        return Image::getAll("post_id = ?", [$this->id]);
+    }
+    public static function getByPostId(int $postId): array
+    {
+        return self::getAll('post_id = ?', [$postId]);
+    }
+
 }

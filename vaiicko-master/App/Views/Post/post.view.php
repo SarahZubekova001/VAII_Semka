@@ -43,8 +43,6 @@ $title = $categoryNameMap[$data['category']] ?? 'Príspevky';
                     <?php endif; ?>
                         <h5 class="card-title"><?= htmlspecialchars($post->getName()) ?></h5>
 
-
-
                     <?php if ($auth->isLogged()): ?>
                         <div class="card-footer text-start">
                             <input type="hidden" name="return_url" value="<?= htmlspecialchars($_SERVER['HTTP_REFERER'] ?? '') ?>">
@@ -52,7 +50,6 @@ $title = $categoryNameMap[$data['category']] ?? 'Príspevky';
                             <a href="<?= $link->url('post.delete', ['id' => $post->getId()]) ?>" class="btn btn-danger btn-sm">Zmazať</a>
                         </div>
                     <?php endif; ?>
-
             </div>
         <?php endforeach; ?>
     </div>
