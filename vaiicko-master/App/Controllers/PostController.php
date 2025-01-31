@@ -39,8 +39,15 @@ class PostController extends AControllerBase {
      */
     public function add(): Response
     {
-        return $this->html();
+        $category = $this->request()->getValue('category') ?? '';
+        $season = $this->request()->getValue('season') ?? '';
+
+        return $this->html([
+            'category' => $category,
+            'season' => $season
+        ], 'add');
     }
+
 
     /**
      * Uloženie nového alebo aktualizácia existujúceho príspevku
@@ -114,7 +121,9 @@ class PostController extends AControllerBase {
                 'post' => $post
             ], $id ? 'edit' : 'add');
         }
-        return new RedirectResponse($this->url('post.category', ['category' => $category]));
+        $category = $post->getCategory();
+
+        return new RedirectResponse($this->url( $category,['season' => $post->getSeason()]));
     }
 
     private function formErrors(): array
@@ -214,12 +223,9 @@ class PostController extends AControllerBase {
             }
         } $post->delete();
 
-        $returnUrl = $this->request()->getValue('return_url');
-        if (!$returnUrl) {
-            $returnUrl = $this->url('post.activity', ['season' => 'zima']);
-        }
+        $returnUrl = $this->request()->getValue('return_url') ?? $this->url('post.category', ['category' => $post->getCategory()]);
 
-        return new RedirectResponse($returnUrl);
+        return new RedirectResponse(urldecode($returnUrl));
     }
 
     public function category(): Response
@@ -238,7 +244,7 @@ class PostController extends AControllerBase {
     }
     public function activity(): Response
     {
-        $season = $this->request()->getValue('season') ?? 'zima';
+        $season = $this->request()->getValue('season') ;
         $posts = Post::where([
             'category' => 'activity',
             'season' => ['celorocne', $season]

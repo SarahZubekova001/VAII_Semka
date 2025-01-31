@@ -24,8 +24,9 @@ $title = $categoryNameMap[$data['category']] ?? 'Príspevky';
 
     <?php if ($auth->isLogged()): ?>
         <div class="text-center mt-1">
-            <a href="<?= $link->url('post.add', ['category' => 'activity', 'season' => 'zima']) ?>" class="btn btn-primary">Pridať nový príspevok</a>
 
+            <a href="<?= $link->url('post.add', ['category' => $data['category'], 'season' => $data['season']]) ?>"
+               class="btn btn-primary">Pridať nový príspevok</a>
         </div>
     <?php endif; ?>
 
@@ -47,7 +48,7 @@ $title = $categoryNameMap[$data['category']] ?? 'Príspevky';
                         <div class="card-footer text-start">
                             <input type="hidden" name="return_url" value="<?= htmlspecialchars($_SERVER['HTTP_REFERER'] ?? '') ?>">
                             <a href="<?= $link->url('post.edit', ['id' => $post->getId()]) ?>" class="btn btn-primary btn-sm">Upraviť</a>
-                            <a href="<?= $link->url('post.delete', ['id' => $post->getId()]) ?>" class="btn btn-danger btn-sm">Zmazať</a>
+                            <a href="<?= $link->url('post.delete', ['id' => $post->getId(), 'return_url' => urlencode($_SERVER['REQUEST_URI'])]) ?>" class="btn btn-danger btn-sm">Zmazať</a>
                         </div>
                     <?php endif; ?>
             </div>

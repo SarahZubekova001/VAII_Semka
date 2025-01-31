@@ -61,10 +61,11 @@
                 <label for="season">Sezona</label>
                 <select class="form-control" id="season" name="season" required>
                     <option value="">Vyberte sezónu</option>
-                    <option value="leto">Leto</option>
-                    <option value="zima">Zima</option>
-                    <option value="celorocne">Celoročne</option>
+                    <option value="leto" <?= ($data['season'] ?? '') === 'leto' ? 'selected' : '' ?>>Leto</option>
+                    <option value="zima" <?= ($data['season'] ?? '') === 'zima' ? 'selected' : '' ?>>Zima</option>
+                    <option value="celorocne" <?= ($data['season'] ?? '') === 'celorocne' ? 'selected' : '' ?>>Celoročne</option>
                 </select>
+
             </div>
 
             <!-- Kategória ako výberové menu -->
@@ -72,10 +73,11 @@
                 <label for="category">Kategória</label>
                 <select class="form-control" id="category" name="category" required>
                     <option value="">Vyberte kategóriu</option>
-                    <option value="activity">Aktivity</option>
-                    <option value="relax">Relax</option>
-                    <option value="sport">Šport</option>
+                    <option value="activity" <?= ($data['category'] ?? '') === 'activity' ? 'selected' : '' ?>>Aktivity</option>
+                    <option value="relax" <?= ($data['category'] ?? '') === 'relax' ? 'selected' : '' ?>>Relax</option>
+                    <option value="sport" <?= ($data['category'] ?? '') === 'sport' ? 'selected' : '' ?>>Šport</option>
                 </select>
+
             </div>
             <div class="form-group">
                 <label for="description">Opis</label>
