@@ -16,10 +16,10 @@ $layout = 'auth';
 
     <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
         <div class="card p-4 w-100" style="max-width: 600px;">
-
             <h3 class="text-center mb-4">Prihlásenie</h3>
             <div id="message" class="alert d-none"></div>
             <form id="loginForm">
+                <input type="hidden" name="redirect" value="<?= htmlspecialchars($_GET['redirect'] ?? '', ENT_QUOTES) ?>">
                 <div class="form-group">
                     <label for="login" class="form-label">Používateľské meno</label>
                     <input type="text" name="login" id="login" class="form-control" placeholder="Zadajte meno" required>
@@ -36,7 +36,7 @@ $layout = 'auth';
     <script>
         $(document).ready(function() {
             $('#loginForm').on('submit', function(e) {
-                e.preventDefault(); // Zabraň obnoveniu stránky
+                e.preventDefault();
 
                 $.ajax({
                     url: '/?c=auth&a=login',
@@ -44,7 +44,7 @@ $layout = 'auth';
                     data: $(this).serialize(),
                     success: function(response) {
                         if (response.success) {
-                            window.location.href = response.redirect;
+                            window.location.href = response.redirect ? response.redirect : '/';
                         } else {
                             $('#message').removeClass('d-none alert-success').addClass('alert-danger').text(response.message);
                         }

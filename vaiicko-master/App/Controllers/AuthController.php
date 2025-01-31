@@ -35,39 +35,67 @@ class AuthController extends AControllerBase
     {
         $formData = $this->app->getRequest()->getPost();
 
-        if (isset($formData['login'], $formData['password'])) {
-            $logged = $this->app->getAuth()->login($formData['login'], $formData['password']);
-
-            if ($logged) {
-                return $this->json([
-                    'success' => true,
-                    'redirect' => $this->url("home.home")
-                ]);
-            } else {
-                return $this->json([
-                    'success' => false,
-                    'message' => 'Zlý login alebo heslo!'
-                ]);
-            }
+        if (!isset($formData['login'], $formData['password'])) {
+            return $this->json([
+                'success' => false,
+                'message' => 'Neplatná požiadavka alebo chýbajúce údaje.'
+            ]);
         }
 
+        $logged = $this->app->getAuth()->login($formData['login'], $formData['password']);
+        $redirect = $formData['redirect'] ?? $this->url("home.home");
         return $this->json([
-            'success' => false,
-            'message' => 'Neplatná požiadavka alebo chýbajúce údaje.'
+            'success' => $logged,
+            'redirect' => $logged ? $redirect : null,
+            'message' => $logged ? null : 'Zlý login alebo heslo!'
         ]);
     }
+    public function register(): Response
+    {
+        $formData = $this->app->getRequest()->getPost();
+        $errors = [];
+
+        if (empty($formData['login'])) {
+            $errors['login'] = "Používateľské meno je povinné.";
+        }
+        if (empty($formData['password'])) {
+            $errors['password'] = "Heslo je povinné.";
+        }
+
+        $existingUsers = User::getAll("username = ?", [$formData['login']], null, 1);
+        if (!empty($existingUsers)) {
+            $errors['login'] = "Používateľ s týmto menom už existuje.";
+        }
+
+        // Ak sú chyby, vrátime formulár s chybami
+        if (!empty($errors)) {
+            return $this->html(['errors' => $errors, 'formData' => $formData], 'register');
+        }
+
+        $user = new User();
+        $user->setUsername($formData['login']);
+        $user->setPassword($formData['password']);
+        $user->save(); // Uloženie do DB
+
+        return $this->html(['successMessage' => "Úspešne pridaný do databázy!"], 'register');
+    }
+
 
     public function logout(): Response {
         session_destroy();
-        return $this->redirect('/?c=home&a=home');
+        $redirect = $_GET['redirect'] ?? $this->url("home.home");
+        $redirect = urldecode($redirect);
+
+        return $this->redirect($redirect);
     }
     public function showLoginForm(): Response
     {
         return $this->html(null, 'login');
     }
-//    /**
-//     * Logout a user
-//     * @return Response
-//     */
+    public function showRegisterForm() : Response
+    {
+        return $this->html(['errors' => [], 'successMessage' => null], 'register');
+    }
+
 
 }

@@ -9,7 +9,6 @@ class User extends Model
     protected ?int $id = null;
     protected ?string $username = null;
     protected ?string $passwordHash = null;
-    protected ?string $passwordSalt = null;
 
     public function getId(): ?int
     {
@@ -40,14 +39,6 @@ class User extends Model
     public function setPassword(string $password): void
     {
         $this->passwordHash = password_hash($password, PASSWORD_DEFAULT);
-    }
-    public function getPasswordSalt(): ?string
-    {
-        return $this->passwordSalt;
-    }
-    public function setPasswordSalt(string $passwordSalt): void
-    {
-        $this->passwordSalt = $passwordSalt;
     }
 
 }

@@ -35,20 +35,26 @@
                         <a class="nav-link active" href="<?= $link->url('home.summer') ?>">Leto</a>
                         <a class="nav-link active" href="<?= $link->url('restaurant.restaurants') ?>">Reštaurácie</a>
                         <a class="nav-link active" href="<?= $link->url('home.info') ?>">Info</a>
+                        <?php if ($auth->isLogged()): ?>
+                        <a class="nav-link active" href="<?= $link->url('auth.showRegisterForm') ?>">Registrovanie používateľa</a>
+
+                    <?php endif; ?>
                     </div>
+
                 </div>
             </div>
         </nav>
         <!-- Prihlásenie alebo Odhlásenie -->
         <?php if ($auth->isLogged()): ?>
+
             <a class="nav-link d-none d-lg-block position-absolute"
-               href="<?= $link->url('auth.logout', ['redirect' => urlencode($_SERVER['REQUEST_URI'])]) ?>"
+               href="<?= $link->url('auth.logout', ['redirect' => $_SERVER['REQUEST_URI']]) ?>"
                style="right: 20px;">
                 Odhlásenie
             </a>
         <?php else: ?>
             <a class="nav-link d-none d-lg-block position-absolute"
-               href="<?= $link->url('auth.showLoginForm', ['redirect' => urlencode($_SERVER['REQUEST_URI'])]) ?>"
+               href="<?= $link->url('auth.showLoginForm', ['redirect' => $_SERVER['REQUEST_URI']]) ?>"
                style="right: 20px;">
                 Prihlásenie
             </a>

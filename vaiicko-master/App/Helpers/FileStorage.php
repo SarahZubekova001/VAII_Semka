@@ -20,10 +20,14 @@ class FileStorage
         $filePrefix = hrtime(true);
         // build storing file path
         $filePath = FileStorage::UPLOAD_DIR . DIRECTORY_SEPARATOR . $filePrefix . "-" .$fileData['name'];
+        error_log("Trying to save file: " . $filePath);
+        error_log("Temporary file path: " . $fileData['tmp_name']);
         // do the move
         if (move_uploaded_file($fileData['tmp_name'], $filePath)) {
+            error_log("File successfully saved: " . $filePath);
             return $filePrefix . "-" .$fileData['name'];
         } else {
+            error_log("File upload failed.");
             throw new HTTPException(503, 'File upload failed. Did you create upload directory?');
         }
     }

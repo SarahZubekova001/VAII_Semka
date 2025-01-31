@@ -21,12 +21,10 @@ class DatabaseAuthenticator implements IAuthenticator
         $user = $users[0] ?? null;
 
         if (!$user) {
-            return false; // Používateľ nenájdený
+            return false;
         }
 
-        // Overenie hesla
         if (password_verify($password, $user->getPasswordHash())) {
-            // Uloženie používateľa do relácie
             $_SESSION['user'] = [
                 'id' => $user->getId(),
                 'username' => $user->getUsername(),
@@ -34,10 +32,8 @@ class DatabaseAuthenticator implements IAuthenticator
             return true;
         }
 
-        return false; // Nesprávne heslo
+        return false;
     }
-
-
     public function logout(): void
     {
         if (isset($_SESSION["user"])) {
