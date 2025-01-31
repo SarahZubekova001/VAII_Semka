@@ -24,11 +24,11 @@
         <nav class="navbar navbar-expand-lg">
             <div class="container-fluid">
                 <a class="navbar-brand" href="<?= $link->url('home.home') ?>">Home</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
-                        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                        aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
                     <!-- Navigačné odkazy -->
                     <div class="navbar-nav">
                         <a class="nav-link active" href="<?= $link->url('home.summer') ?>">Leto</a>
@@ -36,9 +36,19 @@
                         <a class="nav-link active" href="<?= $link->url('restaurant.restaurants') ?>">Reštaurácie</a>
                         <a class="nav-link active" href="<?= $link->url('home.info') ?>">Info</a>
                         <?php if ($auth->isLogged()): ?>
-                        <a class="nav-link active" href="<?= $link->url('auth.showRegisterForm') ?>">Registrovanie používateľa</a>
+                            <ul class="navbar-nav">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Administrácia
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <li><a class="dropdown-item" href="<?= $link->url('auth.showRegisterForm')?>">Registrácia</a></li>
+                                        <li><a class="dropdown-item" href="#">Vymazanie</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        <?php endif; ?>
 
-                    <?php endif; ?>
                     </div>
 
                 </div>
