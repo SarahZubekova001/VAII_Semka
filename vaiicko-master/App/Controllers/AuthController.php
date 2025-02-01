@@ -94,6 +94,9 @@ class AuthController extends AControllerBase
     }
     public function showRegisterForm() : Response
     {
+        if (!$this->app->getAuth()->isLogged()) {
+            return $this->redirect($this->url('auth.showLoginForm'));
+        }
         return $this->html(['errors' => [], 'successMessage' => null], 'register');
     }
 

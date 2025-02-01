@@ -74,10 +74,8 @@ class Address extends \App\Core\Model {
         $newAddress->setPostalCode($postalCode);
         $newAddress->setDescriptiveNumber($descriptive_number);
 
-        // Uložte novú adresu do databázy
-        $newAddress->save();
 
-        // Overte, či sa ID adresy správne vygenerovalo
+        $newAddress->save();
         if (!$newAddress->getId()) {
             throw new \Exception("Failed to generate primary key for address.");
         }

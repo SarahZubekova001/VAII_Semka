@@ -39,6 +39,10 @@ class PostController extends AControllerBase {
      */
     public function add(): Response
     {
+        // Kontrola prihlásenia
+        if (!$this->app->getAuth()->isLogged()) {
+            return $this->redirect($this->url('auth.showLoginForm'));
+        }
         $category = $this->request()->getValue('category') ?? '';
         $season = $this->request()->getValue('season') ?? '';
 
@@ -56,6 +60,10 @@ class PostController extends AControllerBase {
      */
     public function store(): Response
     {
+        // Kontrola prihlásenia
+        if (!$this->app->getAuth()->isLogged()) {
+            return $this->redirect($this->url('auth.showLoginForm'));
+        }
         $id = $this->request()->getValue('id');
         $post = $id ? Post::getOne($id) : new Post();
 
@@ -198,6 +206,10 @@ class PostController extends AControllerBase {
 
     public function edit(): Response
     {
+        // Kontrola prihlásenia
+        if (!$this->app->getAuth()->isLogged()) {
+            return $this->redirect($this->url('auth.showLoginForm'));
+        }
         $id = $this->request()->getValue('id');
         $post = Post::getOne($id);
 
@@ -210,6 +222,10 @@ class PostController extends AControllerBase {
 
     public function delete(): Response
     {
+        // Kontrola prihlásenia
+        if (!$this->app->getAuth()->isLogged()) {
+            return $this->redirect($this->url('auth.showLoginForm'));
+        }
         $id = $this->request()->getValue('id');
         $post = Post::getOne($id);
 
