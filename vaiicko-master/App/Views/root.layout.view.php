@@ -42,8 +42,12 @@
                                         Administrácia
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <li><a class="dropdown-item" href="<?= $link->url('auth.showRegisterForm')?>">Registrácia</a></li>
-                                        <li><a class="dropdown-item" href="#">Vymazanie</a></li>
+                                        <li><a class="dropdown-item" href="<?= $link->url('auth.showRegisterForm')?>">Registrácia nového používateľa</a></li>
+                                        <li>
+                                            <button class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
+                                                Vymazanie účtu
+                                            </button>
+                                        </li>
                                     </ul>
                                 </li>
                             </ul>
@@ -77,5 +81,28 @@
         <?= $contentHTML ?>
     </div>
 </div>
+
+<!-- Modal na potvrdenie vymazania účtu -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Potvrdenie vymazania účtu</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Naozaj chcete vymazať svoj účet? Táto akcia je nevratná!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zrušiť</button>
+                <form action="<?= $link->url('auth.deleteAccount') ?>" method="POST">
+                    <input type="hidden" name="_token" value="<?= $_SESSION['_token'] ?? '' ?>"> <!-- CSRF ochrana -->
+                    <button type="submit" class="btn btn-danger">Vymazať účet</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

@@ -100,5 +100,38 @@ class AuthController extends AControllerBase
         return $this->html(['errors' => [], 'successMessage' => null], 'register');
     }
 
+    public function deleteAccount(): Response
+    {
+        if (!$this->app->getAuth()->isLogged()) {
+            return $this->redirect($this->url("home.home"));
+        }
+
+        $userId = $this->app->getAuth()->getLoggedUserId();
+        if (is_array($userId) && isset($userId['id'])) {
+            $userId = $userId['id']; // Ak je ID v poli, extrahujeme ho
+        }
+
+        if (!$userId) {
+            return $this->redirect($this->url("home.home"));
+        }
+
+        $user = User::getOne($userId);
+        if (!$user) {
+            return $this->redirect($this->url("home.home"));
+        }
+
+        // Vymazanie používateľa
+        $user->delete();
+
+        // Odhlásenie a zmazanie session
+        $_SESSION = [];
+        session_unset();
+        session_destroy();
+        setcookie(session_name(), '', time() - 3600);
+
+        return $this->redirect($this->url("home.home"));
+    }
+
+
 
 }
