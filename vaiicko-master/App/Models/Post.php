@@ -103,9 +103,19 @@ class Post extends Model
      */
     public function getImagePath(): ?Image
     {
-        $images = Image::getAll("post_id  = ?", [$this->id]);
+        // Ak existuje session s hlavnou fotkou, použije ju
+        if (!empty($_SESSION['main_image'][$this->id])) {
+            $imagePath = $_SESSION['main_image'][$this->id];
+            $image = new Image();
+            $image->setPath($imagePath);
+            return $image;
+        }
+
+        // Inak použije prvý obrázok z galérie
+        $images = Image::getAll("post_id = ?", [$this->id]);
         return $images[0] ?? null;
     }
+
     public function setImagePath(string $path): void {
 
         $image = new Image();

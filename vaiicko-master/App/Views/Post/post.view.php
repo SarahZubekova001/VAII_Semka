@@ -24,7 +24,6 @@ $title = $categoryNameMap[$data['category']] ?? 'Príspevky';
 
     <?php if ($auth->isLogged()): ?>
         <div class="text-center mt-1">
-
             <a href="<?= $link->url('post.add', ['category' => $data['category'], 'season' => $data['season']]) ?>"
                class="btn btn-primary">Pridať nový príspevok</a>
         </div>
@@ -34,15 +33,19 @@ $title = $categoryNameMap[$data['category']] ?? 'Príspevky';
         <?php foreach ($data['posts'] as $post): ?>
             <div class="col">
 
-                    <?php $gallery = $post->getGallery(); ?>
-                    <?php if (!empty($gallery)): ?>
-                        <a href="<?= $link->url('post.detail', ['id' => $post->getId()]) ?>" class="d-block" style="text-decoration: none;">
-                            <div class="image-box" style="background-image: url('/public/uploads/<?= htmlspecialchars($gallery[0]->getPath()) ?>'); background-size: cover; background-position: center; height: 200px;"></div>
-                        </a>
-                    <?php else: ?>
-                        <p class="text-center text-muted">Obrázok nie je dostupný</p>
-                    <?php endif; ?>
-                        <h5 class="card-title"><?= htmlspecialchars($post->getName()) ?></h5>
+                <?php
+                $gallery = $post->getGallery();
+                $mainImage = $_SESSION['main_image'][$post->getId()] ?? ($gallery[0]->getPath() ?? null);
+                ?>
+                <?php if (!empty($mainImage)): ?>
+                    <a href="<?= $link->url('post.detail', ['id' => $post->getId()]) ?>" class="d-block" style="text-decoration: none;">
+                        <div class="image-box" style="background-image: url('/public/uploads/<?= htmlspecialchars($mainImage) ?>'); background-size: cover; background-position: center; height: 200px;"></div>
+                    </a>
+                <?php else: ?>
+                    <p class="text-center text-muted">Obrázok nie je dostupný</p>
+                <?php endif; ?>
+
+                <h5 class="card-title"><?= htmlspecialchars($post->getName()) ?></h5>
 
                     <?php if ($auth->isLogged()): ?>
                         <div class="card-footer text-start">

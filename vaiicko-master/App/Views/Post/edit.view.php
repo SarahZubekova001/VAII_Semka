@@ -83,16 +83,28 @@
                 <label for="description" class="form-label">Popis</label>
                 <textarea class="form-control" id="description" name="description" rows="3" required><?= @$data['post']?->getDescription() ?></textarea>
 
-            <div class="form-group">
-                <label for="image" class="form-label">Obrázok</label>
-                <?php if ($data['post']?->getImagePath()?->getPath()): ?>
-                    <p>Aktuálny obrázok: <?= @$data['post']->getImagePath()?->getPath() ?></p>
-                <?php endif; ?>
-                <div class="input-group has-validation mb-4 ">
-                    <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                <div class="form-group">
+                    <label for="image" class="form-label">Pridať nové obrázky</label>
+                    <input type="file" class="form-control" id="image" name="image[]" accept="image/*" multiple>
                 </div>
-            </div>
-            <button type="submit" class="btn btn-success">Uložiť</button>
+
+                <?php if (!empty($data['post']->getGallery())): ?>
+                    <h5>Existujúce obrázky v galérii</h5>
+                    <div class="row">
+                        <?php foreach ($data['post']->getGallery() as $image): ?>
+                            <div class="col-md-3 text-center">
+                                <img src="/public/uploads/<?= htmlspecialchars($image->getPath()) ?>" class="img-thumbnail" style="height: 100px;" alt="Obrazok prispevku">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="main_image" value="<?= htmlspecialchars($image->getPath()) ?>"
+                                        <?= ($data['post']->getImagePath()?->getPath() === $image->getPath()) ? 'checked' : '' ?>>
+                                    <label class="form-check-label">Nastaviť ako hlavnú</label>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+
+                <button type="submit" class="btn btn-success">Uložiť</button>
         </form>
     </div>
 </div>

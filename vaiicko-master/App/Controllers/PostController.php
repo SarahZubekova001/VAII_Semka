@@ -30,9 +30,7 @@ class PostController extends AControllerBase {
         }
         return $this->html(['post' => $post], 'detail');
     }
-
-
-
+    
     /**
      * Zobrazenie formulára na pridanie nového príspevku
      * @return Response
@@ -87,7 +85,7 @@ class PostController extends AControllerBase {
         $post->setIdAddress($address->getId());
 
         $imageFiles = $this->request()->getFiles()['image'] ?? [];
-
+//
         if (is_array($imageFiles['tmp_name'])) {
             foreach ($imageFiles['tmp_name'] as $index => $tmpName) {
                 if (!empty($imageFiles['name'][$index]) && is_string($tmpName)) {
@@ -103,22 +101,11 @@ class PostController extends AControllerBase {
             $newFileName = FileStorage::saveFile($imageFiles);
             $post->setImagePath($newFileName);
         }
-////        foreach ($imageFile['tmp_name'] as $index => $tmpName) {
-//            if (!empty($imageFile['name'])) {
-//                $oldImage = $post->getImagePath();
-//                if ($oldImage) {
-//                    FileStorage::deleteFile($oldImage->getPath());
-//                    $oldImage->delete();
-//                }
-//
-//                $newFileName = FileStorage::saveFile($imageFile);
-//                $post->setImagePath($newFileName);
-//            }
-////            if (!empty($imageFiles['name'][$index])) {
-////                $newFileName = FileStorage::saveFile($tmpName);
-////                $post->addImageToGallery($newFileName);
-////            }
-////        }
+        $mainImage = $this->request()->getValue('main_image');
+
+        if ($mainImage) {
+            $_SESSION['main_image'][$post->getId()] = $mainImage; // Uložíme do session pre daný post ID
+        }
 
         $post->save();
 
@@ -130,8 +117,10 @@ class PostController extends AControllerBase {
             ], $id ? 'edit' : 'add');
         }
         $category = $post->getCategory();
+        $returnUrl = $this->request()->getValue('return_url') ?? $this->url($category, ['season' => $this->request()->getValue('season')]);
 
-        return new RedirectResponse($this->url( $category,['season' => $post->getSeason()]));
+        return new RedirectResponse(urldecode($returnUrl));
+
     }
 
     private function formErrors(): array

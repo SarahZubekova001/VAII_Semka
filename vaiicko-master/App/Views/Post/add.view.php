@@ -83,10 +83,12 @@
                 <label for="description">Opis</label>
                 <input type="text" class="form-control" id="description" name="description" required>
             </div>
+
             <div class="form-group">
                 <label for="image">Galéria</label>
-                <input type="file" id="image" name="image[]" class="form-control" multiple accept="image/*" required>
-            </div>
+                <input type="file" id="image" name="image[]" class="form-control" multiple accept="image/*">
+            </div>\
+
             <button type="submit" class="btn btn-success btn-block">Uložiť</button>
         </form>
     </div>
