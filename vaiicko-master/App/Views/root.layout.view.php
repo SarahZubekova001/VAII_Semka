@@ -20,59 +20,55 @@
 <body>
 
 <?php if (empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest'): ?>
-    <nav class="navbar" style="background-color: #e3f2fd; position: relative;">
-        <nav class="navbar navbar-expand-lg">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="<?= $link->url('home.home') ?>">Home</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
-                        aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                    <!-- Navigačné odkazy -->
-                    <div class="navbar-nav">
-                        <a class="nav-link active" href="<?= $link->url('home.summer') ?>">Leto</a>
-                        <a class="nav-link active" href="<?= $link->url('home.winter') ?>">Zima</a>
-                        <a class="nav-link active" href="<?= $link->url('restaurant.restaurants') ?>">Reštaurácie</a>
-                        <a class="nav-link active" href="<?= $link->url('home.info') ?>">Info</a>
-                        <?php if ($auth->isLogged()): ?>
-                            <ul class="navbar-nav">
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Administrácia
-                                    </a>
-                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <li><a class="dropdown-item" href="<?= $link->url('auth.showRegisterForm')?>">Registrácia nového používateľa</a></li>
-                                        <li>
-                                            <button class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
-                                                Vymazanie účtu
-                                            </button>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        <?php endif; ?>
-
-                    </div>
+    <nav class="navbar navbar-expand-lg" style="background-color: #e3f2fd; position: relative;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="<?= $link->url('home.home') ?>">Home</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                    aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown" style="justify-content: space-between;">
+                <!-- Navigačné odkazy -->
+                <div class="navbar-nav">
+                    <a class="nav-link active" href="<?= $link->url('home.summer') ?>">Leto</a>
+                    <a class="nav-link active" href="<?= $link->url('home.winter') ?>">Zima</a>
+                    <a class="nav-link active" href="<?= $link->url('restaurant.restaurants') ?>">Reštaurácie</a>
+                    <a class="nav-link active" href="<?= $link->url('home.info') ?>">Info</a>
+                    <?php if ($auth->isLogged()): ?>
+                        <ul class="navbar-nav">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Administrácia
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li><a class="dropdown-item" href="<?= $link->url('auth.showRegisterForm')?>">Registrácia nového používateľa</a></li>
+                                    <li>
+                                        <button class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
+                                            Vymazanie účtu
+                                        </button>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    <?php endif; ?>
 
                 </div>
+                <!-- Prihlásenie alebo Odhlásenie -->
+                <?php if ($auth->isLogged()): ?>
+                    <a class="nav-link active"
+                       href="<?= $link->url('auth.logout', ['redirect' => $_SERVER['REQUEST_URI']]) ?>"
+                       style="color: black; right: 20px; ">
+                        Odhlásenie
+                    </a>
+                <?php else: ?>
+                    <a class="nav-link active"
+                       href="<?= $link->url('auth.showLoginForm', ['redirect' => $_SERVER['REQUEST_URI']]) ?>"
+                       style="color: black; right: 20px;">
+                        Prihlásenie
+                    </a>
+                <?php endif; ?>
             </div>
-        </nav>
-        <!-- Prihlásenie alebo Odhlásenie -->
-        <?php if ($auth->isLogged()): ?>
-
-            <a class="nav-link d-none d-lg-block position-absolute"
-               href="<?= $link->url('auth.logout', ['redirect' => $_SERVER['REQUEST_URI']]) ?>"
-               style="right: 20px;">
-                Odhlásenie
-            </a>
-        <?php else: ?>
-            <a class="nav-link d-none d-lg-block position-absolute"
-               href="<?= $link->url('auth.showLoginForm', ['redirect' => $_SERVER['REQUEST_URI']]) ?>"
-               style="right: 20px;">
-                Prihlásenie
-            </a>
-        <?php endif; ?>
+        </div>
     </nav>
 <?php endif; ?>
 
