@@ -17,7 +17,7 @@ if (!isset($data['post'])) {
 <body>
 
 <div class="container mt-4">
-    <div class="text-center mt-4 mb-4">
+    <div class="text-center mt-1 mb-4">
         <a href="<?= $_SERVER['HTTP_REFERER'] ?? '/' ?>" class="btn btn-secondary">Späť</a>
     </div>
     <h1 class="text-center mb-4"><?= htmlspecialchars($data['post']->getName() ?? 'Neznámy príspevok') ?></h1>
