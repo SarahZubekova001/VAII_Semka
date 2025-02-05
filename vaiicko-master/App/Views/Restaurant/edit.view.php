@@ -67,13 +67,15 @@
                        value="<?= @$data['restaurant']?->getUrlAddress() ?>" required>
             <div class="form-group">
                 <label for="image" class="form-label">Obrázok</label>
-                <?php if ($data['restaurant']?->getImagePath()?->getPath()): ?>
-                    <p>Aktuálny obrázok:</p>
-                    <<img src="/uploads/<?= htmlspecialchars($data['restaurant']->getImagePath()?->getPath()) ?>"
-                          alt="Obrázok reštaurácie"
-                          style="max-width: 100%; height: auto;">
+                <?php
+                    $imageObject = $data['restaurant']->getImagePath();
+                    $imagePath = $imageObject ? $imageObject->getPath() : null;
+                    ?>
 
+                    <?php if (!empty($imagePath)): ?>
+                        <p>Aktuálny obrázok: <?= htmlspecialchars(basename($imagePath)) ?></p>
                 <?php endif; ?>
+
                 <div class="input-group has-validation mb-4 mt-2">
                     <input type="file" class="form-control" id="image" name="image" accept="image/*">
                 </div>
@@ -84,6 +86,5 @@
 </div>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.4.4/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
