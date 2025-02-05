@@ -95,8 +95,10 @@
                             <div class="col-md-3 text-center">
                                 <img src="/public/uploads/<?= htmlspecialchars($image->getPath()) ?>" class="img-thumbnail" style="height: 100px;" alt="Obrazok prispevku">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="main_image" value="<?= htmlspecialchars($image->getPath()) ?>"
-                                        <?= ($data['post']->getImagePath()?->getPath() === $image->getPath()) ? 'checked' : '' ?>>
+                                    <input class="form-check-input" type="radio" name="main_image" value="<?= htmlspecialchars($image->getId()) ?>"
+                                        <?= ($data['post']->getMainImage()?->getId() === $image->getId()) ? 'checked' : '' ?>>
+
+
                                     <label class="form-check-label">Nastaviť ako hlavnú</label>
                                 </div>
                             </div>

@@ -7,6 +7,7 @@ use App\Core\Responses\RedirectResponse;
 use App\Core\Responses\Response;
 use App\Helpers\FileStorage;
 use App\Models\Address;
+use App\Models\Image;
 use App\Models\Post;
 use Exception;
 
@@ -85,7 +86,7 @@ class PostController extends AControllerBase {
         $post->setIdAddress($address->getId());
 
         $imageFiles = $this->request()->getFiles()['image'] ?? [];
-//
+
         if (is_array($imageFiles['tmp_name'])) {
             foreach ($imageFiles['tmp_name'] as $index => $tmpName) {
                 if (!empty($imageFiles['name'][$index]) && is_string($tmpName)) {
@@ -104,10 +105,15 @@ class PostController extends AControllerBase {
         $mainImage = $this->request()->getValue('main_image');
 
         if ($mainImage) {
-            $_SESSION['main_image'][$post->getId()] = $mainImage; // Uložíme do session pre daný post ID
+            $image = Image::getOne($mainImage);
+            if ($image) {
+                $post->setMainImage($image->getId()); // Nastavíme nový hlavný obrázok
+            }
         }
 
-        $post->save();
+
+        $post->save(); // Uloženie do databázy
+
 
         $formErrors = [];
         if (!empty($formErrors)) {

@@ -13,6 +13,7 @@ class Post extends Model
     protected ?string $category = null;
     protected ?int $id_address = null;
     protected ?string $opening_hours = null;
+    protected ?int $main_image_id = null;
     protected static string $tableName = 'posts';
 
     public function getId(): ?int
@@ -173,6 +174,16 @@ class Post extends Model
         $image->setPath($path);
         $image->setPostId($this->getId());
         $image->save();
+    }
+
+    public function getMainImage(): ?Image
+    {
+        return $this->main_image_id ? Image::getOne($this->main_image_id) : null;
+    }
+
+    public function setMainImage(?int $imageId): void
+    {
+        $this->main_image_id = $imageId;
     }
 
 

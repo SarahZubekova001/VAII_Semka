@@ -35,7 +35,7 @@ $title = $categoryNameMap[$data['category']] ?? 'Príspevky';
 
                 <?php
                 $gallery = $post->getGallery();
-                $mainImage = $_SESSION['main_image'][$post->getId()] ?? ($gallery[0]->getPath() ?? null);
+                $mainImage = $post->getMainImage() ? $post->getMainImage()->getPath() : ($gallery[0]->getPath() ?? null);
                 ?>
                 <?php if (!empty($mainImage)): ?>
                     <a href="<?= $link->url('post.detail', ['id' => $post->getId()]) ?>" class="d-block" style="text-decoration: none;">
@@ -44,6 +44,7 @@ $title = $categoryNameMap[$data['category']] ?? 'Príspevky';
                 <?php else: ?>
                     <p class="text-center text-muted">Obrázok nie je dostupný</p>
                 <?php endif; ?>
+
 
                 <h5 class="card-title"><?= htmlspecialchars($post->getName()) ?></h5>
 

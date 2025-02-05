@@ -53,4 +53,10 @@ class Image extends Model {
         return self::getAll('post_id = ?', [$postId]);
     }
 
+    public function getId()
+    {
+        return $this->id;
+
+    }
+
 }
