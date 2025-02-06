@@ -67,7 +67,7 @@
             <div class="institution-box" id="info-center"></div>
             <h4>Informačné centrum</h4>
             <p>Poskytuje návštevníkom aktuálne informácie o turistických trasách, kultúrnych podujatiach a ubytovaní v obci.</p>
-            <p><strong>Telefón:</strong> +421 43 5395 102</p>
+            <p><strong>Telefón:</strong> <a href="+421 43 5395 102"> +421 43 5395 102 </a></p>
         </div>
 
         <!-- Obecný úrad -->
@@ -76,7 +76,7 @@
             <h4>Obecný úrad</h4>
             <p>Administratívne centrum obce, kde sa vybavujú všetky dôležité záležitosti obyvateľov a návštevníkov.</p>
             <p><strong>Adresa:</strong> Zuberec 1, 027 32 Zuberec</p>
-            <p><strong>Telefón:</strong> +421 43 5395 101</p>
+            <p><strong>Telefón:</strong>  <a href="+421 43 5395 101">+421 43 5395 101 </a></p>
         </div>
     </div>
 </div>
