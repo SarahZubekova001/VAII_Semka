@@ -13,150 +13,120 @@ use App\Models\Address;
 
 class RestaurantController extends AControllerBase
 {
-
     public function index(): Response
     {
         return $this->html(['restaurants' => Restaurant::getAll()]);
-
     }
 
     public function add(): Response
     {
-        // Kontrola prihlásenia
         if (!$this->app->getAuth()->isLogged()) {
-            return $this->redirect($this->url('auth.showLoginForm'));
+            return $this->redirect($this->url('auth.loginForm'));
         }
         return $this->html();
     }
 
-    /**
-     * @throws HTTPException
-     * @throws \Exception
-     */
     public function store(): Response
     {
-        // Kontrola prihlásenia
         if (!$this->app->getAuth()->isLogged()) {
-            return $this->redirect($this->url('auth.showLoginForm'));
+            return $this->redirect($this->url('auth.loginForm'));
         }
 
         $id = $this->request()->getValue('id');
-        $oldImage = null;
+        $restaurant = $id ? Restaurant::getOne($id) : new Restaurant();
 
-        if ($id > 0) {
+        if ($id && !$restaurant) {
+            throw new \Exception("Reštaurácia nenájdená");
+        }
 
-            $restaurant = Restaurant::getOne($id);
-            if (!$restaurant) {
-                throw new \Exception("Reštaurácia nenájdená");
-            }
-            $oldImage = $restaurant->getImagePath();
-        } else {
-            $restaurant = new Restaurant();
+        $errors = $this->validateForm();
+        if (!empty($errors)) {
+            return $this->html(['errors' => $errors, 'restaurant' => $restaurant], $id ? 'edit' : 'add');
         }
 
         $restaurant->setName($this->request()->getValue('name'));
         $restaurant->setOpeningHours($this->request()->getValue('opening_hours'));
-
-        $street = $this->request()->getValue('street');
-        $city = $this->request()->getValue('city');
-        $postalCode = (int)$this->request()->getValue('postal_code');
-        $descriptiveNumber = (int)$this->request()->getValue('descriptive_number');
-
-        $address = Address::findOrCreate($street, $city, $postalCode, $descriptiveNumber);
-
-        $restaurant->setAddressId($address->getId());
+        $restaurant->setPhoneNumber($this->request()->getValue('phone_number'));
         $restaurant->setUrlAddress($this->request()->getValue('url_address'));
 
-
-        $formErrors = $this->formErrors();
-        if (count($formErrors) > 0) {
-            return $this->html(['errors' => $formErrors, 'restaurant' => $restaurant], $id > 0 ? 'edit' : 'add');
-        }
-        $phoneNumber = $this->request()->getValue('phone_number');
-        if (!is_numeric($phoneNumber)) {
-            return $this->html(['errors' => ['Telefonne číslo musí byť číslo!'], 'restaurant' => $restaurant], $id > 0 ? 'edit' : 'add');
-        }
-        $restaurant->setPhoneNumber((int) $phoneNumber);
+        $address = Address::findOrCreate(
+            $this->request()->getValue('street'),
+            $this->request()->getValue('city'),
+            $this->request()->getValue('postal_code'),
+            $this->request()->getValue('descriptive_number')
+        );
+        $restaurant->setAddressId($address->getId());
 
 
         $imageFile = $this->request()->getFiles()['image'] ?? null;
+        $allowedMimeTypes = ['image/jpeg', 'image/png'];
 
-        if (!empty($imageFile['name']) && is_string($imageFile['tmp_name'])) {
-            $oldImage = $restaurant->getImagePath();
-            if ($oldImage) {
-                FileStorage::deleteFile($oldImage->getPath());
-                $oldImage->delete();
+        if (!empty($imageFile['tmp_name']) && is_string($imageFile['tmp_name'])) {
+            $fileMimeType = mime_content_type($imageFile['tmp_name']);
+            if (in_array($fileMimeType, $allowedMimeTypes)) {
+                if ($oldImage = $restaurant->getImagePath()) {
+                    FileStorage::deleteFile($oldImage->getPath());
+                }
+                $newFileName = FileStorage::saveFile($imageFile);
+                $restaurant->setImagePath($newFileName);
             }
-
-            $newFileName = FileStorage::saveFile($imageFile);
-            $restaurant->setImagePath($newFileName);
         }
-
 
         $restaurant->save();
-        if (count($formErrors) > 0) {
-            // Ak sú chyby, vráť používateľovi formulár s chybami
-            return $this->html(['errors' => $formErrors, 'restaurant' => $restaurant], $id > 0 ? 'edit' : 'add');
-        }
-
         return new RedirectResponse($this->url('restaurant.restaurants'));
     }
 
-    private function formErrors(): array
+    private function validateForm(): array
     {
         $errors = [];
-        $allowedMimeTypes = ['image/jpeg', 'image/png'];
+        $requiredFields = ['name', 'opening_hours', 'phone_number', 'street', 'city', 'postal_code', 'url_address'];
 
-        $imageFile = $this->request()->getFiles()['image'] ?? null;
-        if (!empty($imageFile['name'])) {
-            if (!in_array($imageFile['type'], $allowedMimeTypes)) {
-                $errors[] = "Obrázok musí byť vo formáte JPG alebo PNG!";
+        foreach ($requiredFields as $field) {
+            if (empty($this->request()->getValue($field))) {
+                $errors[] = "Pole '$field' musí byť vyplnené!";
             }
         }
-        if ($imageFile['size'] > 5 * 1024 * 1024) { // 16 MB v bajtoch
-            $errors[] = "Obrázok je príliš veľký! Maximálna povolená veľkosť je 16 MB.";
-        }
 
-        if (empty($this->request()->getValue('name'))) {
-            $errors[] = "Pole Názov musí byť vyplnené!";
-        }
-        if (empty($this->request()->getValue('opening_hours'))) {
-            $errors[] = "Otváracie hodiny musia byť vyplnené!";
-        }
-        if (empty($this->request()->getValue('phone_number'))) {
-            $errors[] = "Telefonne číslo musí byť vyplnené!";
-        }
         if (!is_numeric($this->request()->getValue('phone_number'))) {
             $errors[] = "Telefonne číslo musí byť číslo!";
         }
-        if (!$imageFile || empty($imageFile['name'])) {
-            $errors[] = "Obrázok musí byť vyplnený!";
-        }
-        if (empty($this->request()->getValue('street'))) {
-            $errors[] = "Ulica musí byť vyplnená!";
-        }
-        if (empty($this->request()->getValue('city'))) {
-            $errors[] = "Mesto musí byť vyplnené!";
-        }
-        if (empty($this->request()->getValue('postal_code'))) {
-            $errors[] = "PSČ musí byť vyplnené!";
-        }
-        if (!is_numeric($this->request()->getValue('postal_code'))) {
+
+        $postalCode = $this->request()->getValue('postal_code');
+        if (!is_numeric($postalCode)) {
             $errors[] = "PSČ musí byť číslo!";
-        }
-        if (empty($this->request()->getValue('descriptive_number'))) {
-            $errors[] = "Popisne číslo musí byť vyplnené!";
-        }
-        if (!is_numeric($this->request()->getValue('postal_code'))) {
-            $errors[] = "PSČ musí byť číslo!";
-        }
-        if (empty($this->request()->getValue('url_address'))) {
-            $errors[] = "Webová stránka musí byť vyplnená!";
+        } elseif ($postalCode < 1 || $postalCode > 2147483647) {
+            $errors[] = "Popisné číslo je príliš veľke";
         }
 
+        $descriptiveNumber = $this->request()->getValue('descriptive_number');
+        if (!is_numeric($descriptiveNumber)) {
+            $errors[] = "Popisné číslo musí byť číslo!";
+        } elseif ($descriptiveNumber < 1 || $descriptiveNumber > 2147483647) {
+            $errors[] = "Popisné číslo je príliš veľke";
+        }
+
+        $allowedMimeTypes = ['image/jpeg', 'image/png'];
+        $imageFiles = $this->request()->getFiles()['image'] ?? [];
+
+        if (isset($imageFiles['tmp_name'])) {
+            if (is_array($imageFiles['tmp_name'])) {
+                foreach ($imageFiles['tmp_name'] as $tmpName) {
+                    if (!empty($tmpName)) {
+                        $fileMimeType = mime_content_type($tmpName);
+                        if (!in_array($fileMimeType, $allowedMimeTypes)) {
+                            $errors[] = "Obrázok musí byť vo formáte JPG alebo PNG!";
+                        }
+                    }
+                }
+            } elseif (!empty($imageFiles['tmp_name'])) {
+                $fileMimeType = mime_content_type($imageFiles['tmp_name']);
+                if (!in_array($fileMimeType, $allowedMimeTypes)) {
+                    $errors[] = "Obrázok musí byť vo formáte JPG alebo PNG!";
+                }
+            }
+        }
         return $errors;
     }
-
 
     public function detail(): Response
     {
@@ -176,9 +146,8 @@ class RestaurantController extends AControllerBase
     }
     public function edit(): Response
     {
-        // Kontrola prihlásenia
         if (!$this->app->getAuth()->isLogged()) {
-            return $this->redirect($this->url('auth.showLoginForm'));
+            return $this->redirect($this->url('auth.loginForm'));
         }
         $id = $this->request()->getValue('id');
         $restaurant = Restaurant::getOne($id);
@@ -196,9 +165,8 @@ class RestaurantController extends AControllerBase
     }
     public function delete(): Response
     {
-        // Kontrola prihlásenia
         if (!$this->app->getAuth()->isLogged()) {
-            return $this->redirect($this->url('auth.showLoginForm'));
+            return $this->redirect($this->url('auth.loginForm'));
         }
         $id = $this->request()->getValue('id');
         $restaurant = Restaurant::getOne($id);
@@ -225,7 +193,6 @@ class RestaurantController extends AControllerBase
         } else {
             $restaurants = Restaurant::getAll();
         }
-
         return $this->html(['restaurants' => $restaurants], 'partial');
     }
 
