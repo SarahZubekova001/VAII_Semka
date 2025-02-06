@@ -49,19 +49,17 @@ class PostController extends AControllerBase {
         $id = $this->request()->getValue('id');
         $post = $id ? Post::getOne($id) : new Post();
 
-        // VALIDÁCIA
         $errors = $this->validateForm();
 
         if (!empty($errors)) {
             return $this->html([
                 'errors' => $errors,
                 'post' => $post,
-                'return_url' => $this->request()->getValue('return_url') // zachovaj návratovú URL
+                'return_url' => $this->request()->getValue('return_url')
             ], $id ? 'edit' : 'add');
         }
 
 
-        // ULOŽENIE ÚDAJOV
         $post->setName($this->request()->getValue('name'));
         $post->setDescription($this->request()->getValue('description'));
         $post->setCategory($this->request()->getValue('category'));
@@ -76,7 +74,6 @@ class PostController extends AControllerBase {
         );
         $post->setIdAddress($address->getId());
 
-        // SPRACOVANIE OBRÁZKOV
         $imageFiles = $this->request()->getFiles()['image'] ?? [];
 
         if (isset($imageFiles['tmp_name'])) {
@@ -103,16 +100,13 @@ class PostController extends AControllerBase {
             }
         }
 
-        // ULOŽENIE HLAVNÉHO OBRÁZKA
         if ($mainImage = $this->request()->getValue('main_image')) {
             if ($image = Image::getOne($mainImage)) {
                 $post->setMainImage($image->getId());
             }
         }
 
-        // ULOŽENIE PRÍSPEVKU
         $post->save();
-
         $returnUrl = $this->request()->getValue('return_url') ?? $this->url($post->getCategory(), ['season' => $post->getSeason()]);
 
         return new RedirectResponse(urldecode($returnUrl));

@@ -116,6 +116,7 @@
         </form>
     </div>
 </div>
+<script src="/public/js/form-validation-post.js"></script>
 
 </body>
 </html>
