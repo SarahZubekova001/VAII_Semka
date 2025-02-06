@@ -87,9 +87,7 @@ class RestaurantController extends AControllerBase
             }
         }
 
-        if (!is_numeric($this->request()->getValue('phone_number'))) {
-            $errors[] = "Telefonne číslo musí byť číslo!";
-        }
+
 
         $postalCode = $this->request()->getValue('postal_code');
         if (!is_numeric($postalCode)) {
@@ -103,6 +101,12 @@ class RestaurantController extends AControllerBase
             $errors[] = "Popisné číslo musí byť číslo!";
         } elseif ($descriptiveNumber < 1 || $descriptiveNumber > 2147483647) {
             $errors[] = "Popisné číslo je príliš veľke";
+        }
+        $telephone = $this->request()->getValue('phone_number');
+        if (!is_numeric($telephone)) {
+            $errors[] = "Telefónne číslo musí byť číslo!";
+        } elseif ($telephone < 1 || $telephone > 2147483647) {
+            $errors[] = "Telefónne číslo je príliš veľke";
         }
 
         $allowedMimeTypes = ['image/jpeg', 'image/png'];

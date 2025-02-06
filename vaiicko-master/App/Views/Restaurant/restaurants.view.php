@@ -62,6 +62,16 @@
                                 </a>
                             </p>
                         <?php endif; ?>
+                        <?php if (!empty($restaurant->getPhoneNumber())): ?>
+                            <p class="card-text">
+                                <strong>Telefón:</strong>
+                                <a href="tel:<?= htmlspecialchars($restaurant->getPhoneNumber()) ?>">
+                                    <?= htmlspecialchars($restaurant->getPhoneNumber()) ?>
+                                </a>
+                            </p>
+                        <?php endif; ?>
+
+
 
                         <?php if ($auth->isLogged()): ?>
                             <div class="d-flex justify-content-center gap-2">
