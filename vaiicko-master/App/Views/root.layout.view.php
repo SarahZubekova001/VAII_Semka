@@ -41,7 +41,7 @@
                                     Administrácia
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="<?= $link->url('auth.showRegisterForm')?>">Registrácia nového používateľa</a></li>
+                                    <li><a class="dropdown-item" href="<?= $link->url('auth.registerForm')?>">Registrácia nového používateľa</a></li>
                                     <li>
                                         <button class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
                                             Vymazanie účtu
@@ -62,7 +62,7 @@
                     </a>
                 <?php else: ?>
                     <a class="nav-link active"
-                       href="<?= $link->url('auth.showLoginForm', ['redirect' => $_SERVER['REQUEST_URI']]) ?>"
+                       href="<?= $link->url('auth.loginForm', ['redirect' => $_SERVER['REQUEST_URI']]) ?>"
                        style="color: black; right: 20px;">
                         Prihlásenie
                     </a>

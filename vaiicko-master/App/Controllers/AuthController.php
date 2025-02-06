@@ -17,20 +17,11 @@ use JsonException;
  */
 class AuthController extends AControllerBase
 {
-    /**
-     *
-     * @return Response
-     */
     public function index(): Response
     {
         return $this->redirect('/auth/login');
     }
 
-    /**
-     * Login a user
-     * @return JsonResponse
-     * @throws JsonException
-     */
     public function login(): Response
     {
         $formData = $this->app->getRequest()->getPost();
@@ -47,9 +38,10 @@ class AuthController extends AControllerBase
         return $this->json([
             'success' => $logged,
             'redirect' => $logged ? $redirect : null,
-            'message' => $logged ? null : 'Zlý login alebo heslo!'
+            'message' => $logged ? null : 'Nesprávne prihlasovacie údaje'
         ]);
     }
+
     public function register(): Response
     {
         $formData = $this->app->getRequest()->getPost();
@@ -67,7 +59,6 @@ class AuthController extends AControllerBase
             $errors['login'] = "Používateľ s týmto menom už existuje.";
         }
 
-        // Ak sú chyby, vrátime formulár s chybami
         if (!empty($errors)) {
             return $this->html(['errors' => $errors, 'formData' => $formData], 'register');
         }
@@ -75,7 +66,7 @@ class AuthController extends AControllerBase
         $user = new User();
         $user->setUsername($formData['login']);
         $user->setPassword($formData['password']);
-        $user->save(); // Uloženie do DB
+        $user->save();
 
         return $this->html(['successMessage' => "Úspešne pridaný do databázy!"], 'register');
     }
@@ -84,18 +75,17 @@ class AuthController extends AControllerBase
     public function logout(): Response {
         session_destroy();
         $redirect = $_GET['redirect'] ?? $this->url("home.home");
-        $redirect = urldecode($redirect);
 
-        return $this->redirect($redirect);
+        return $this->redirect(urldecode($redirect));
     }
-    public function showLoginForm(): Response
+    public function loginForm(): Response
     {
         return $this->html(null, 'login');
     }
-    public function showRegisterForm() : Response
+    public function registerForm() : Response
     {
         if (!$this->app->getAuth()->isLogged()) {
-            return $this->redirect($this->url('auth.showLoginForm'));
+            return $this->redirect($this->url('auth.loginForm'));
         }
         return $this->html(['errors' => [], 'successMessage' => null], 'register');
     }
@@ -131,7 +121,4 @@ class AuthController extends AControllerBase
 
         return $this->redirect($this->url("home.home"));
     }
-
-
-
 }
