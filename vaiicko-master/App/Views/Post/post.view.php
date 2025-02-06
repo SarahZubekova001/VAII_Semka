@@ -38,13 +38,12 @@ $title = $categoryNameMap[$data['category']] ?? 'Príspevky';
                 $mainImage = $post->getMainImage() ? $post->getMainImage()->getPath() : ($gallery[0]->getPath() ?? null);
                 ?>
                 <?php if (!empty($mainImage)): ?>
-                    <a href="<?= $link->url('post.detail', ['id' => $post->getId()]) ?>" class="d-block" style="text-decoration: none;">
+                    <a href="<?= htmlspecialchars($link->url('post.detail', ['id' => $post->getId()])) ?>" class="d-block" style="text-decoration: none;">
                         <div class="image-box" style="background-image: url('/public/uploads/<?= htmlspecialchars($mainImage) ?>'); background-size: cover; background-position: center; height: 200px;"></div>
                     </a>
                 <?php else: ?>
                     <p class="text-center text-muted">Obrázok nie je dostupný</p>
                 <?php endif; ?>
-
 
                 <h5 class="card-title"><?= htmlspecialchars($post->getName()) ?></h5>
 
