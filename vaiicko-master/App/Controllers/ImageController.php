@@ -8,24 +8,16 @@ use App\Core\Responses\RedirectResponse;
 use App\Core\Responses\Response;
 use App\Models\Image;
 use App\Helpers\FileStorage;
+use App\Models\Post;
 
 class ImageController extends AControllerBase
 {
-    /**
-     * Zobrazenie zoznamu obrázkov
-     * @return Response
-     */
     public function index(): Response
     {
         $images = Image::getAll();
         return $this->html(['images' => $images]);
     }
 
-    /**
-     * Zobrazenie detailu konkrétneho obrázka
-     * @return Response
-     * @throws \Exception
-     */
     public function detail(): Response
     {
         $id = $this->request()->getValue('id');
@@ -38,32 +30,16 @@ class ImageController extends AControllerBase
         return $this->html(['image' => $image]);
     }
 
-    /**
-     * Pridanie nového obrázka
-     * @return Response
-     */
     public function add(): Response
     {
         $postId = $this->request()->getValue('post_id');
-        if (!$postId) {
-            throw new HTTPException(400, "Chýbajúce ID príspevku");
+        if (!$postId || !Post::getOne($postId)) {
+            throw new HTTPException(400, "Neplatné ID príspevku");
         }
 
-        $post = Post::getOne($postId);
-        if (!$post) {
-            throw new HTTPException(404, "Príspevok nenájdený");
-        }
-
-        $imageFiles = $this->request()->getFiles()['image'] ?? null;
         return new RedirectResponse($this->url('gallery.index', ['post_id' => $postId]));
     }
 
-
-    /**
-     * Uloženie nového alebo aktualizácia existujúceho obrázka
-     * @return Response
-     * @throws \Exception
-     */
     public function store(): Response
     {
         $id = $this->request()->getValue('id');
@@ -93,11 +69,6 @@ class ImageController extends AControllerBase
         return new RedirectResponse($this->url('image.index'));
     }
 
-    /**
-     * Úprava obrázka
-     * @return Response
-     * @throws \Exception
-     */
     public function edit(): Response
     {
         $id = $this->request()->getValue('id');
