@@ -11,7 +11,7 @@ class Image extends Model {
     protected ?int $restaurant_id = null;
     protected ?int $post_id = null;
 
-    protected static string $tableName = 'images';
+    //protected static string $tableName = 'images';
 
     public function getPath(): ?string {
         return $this->path;
@@ -53,10 +53,9 @@ class Image extends Model {
         return self::getAll('post_id = ?', [$postId]);
     }
 
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
-
     }
 
 }
