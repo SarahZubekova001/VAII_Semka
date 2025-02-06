@@ -88,7 +88,7 @@
 
             <div class="form-group">
                 <label for="image">Galéria</label>
-                <input type="file" id="image" name="image[]" class="form-control" multiple accept="image/*">
+                <input type="file" id="image" name="image[]" class="form-control" multiple accept="image/*" required>
             </div>
 
             <button type="submit" class="btn btn-success btn-block">Uložiť</button>

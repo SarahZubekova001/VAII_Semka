@@ -59,7 +59,6 @@ class PostController extends AControllerBase {
             ], $id ? 'edit' : 'add');
         }
 
-
         $post->setName($this->request()->getValue('name'));
         $post->setDescription($this->request()->getValue('description'));
         $post->setCategory($this->request()->getValue('category'));
@@ -110,8 +109,8 @@ class PostController extends AControllerBase {
         $returnUrl = $this->request()->getValue('return_url') ?? $this->url($post->getCategory(), ['season' => $post->getSeason()]);
 
         return new RedirectResponse(urldecode($returnUrl));
-
     }
+
 
 
     private function validateForm(): array
@@ -139,10 +138,13 @@ class PostController extends AControllerBase {
             $errors[] = "Popisné číslo je príliš veľke";
         }
 
-        $allowedMimeTypes = ['image/jpeg', 'image/png'];
-        $imageFiles = $this->request()->getFiles()['image'] ?? [];
+        $imageFiles = $this->request()->getFiles()['image'] ?? null;
 
-        if (isset($imageFiles['tmp_name'])) {
+        if (!$imageFiles || empty($imageFiles['tmp_name'])) {
+            $errors[] = "Musíte nahrať aspoň jeden obrázok!";
+        } else {
+            // Overenie typu obrázka
+            $allowedMimeTypes = ['image/jpeg', 'image/png'];
             if (is_array($imageFiles['tmp_name'])) {
                 foreach ($imageFiles['tmp_name'] as $tmpName) {
                     if (!empty($tmpName)) {
@@ -159,6 +161,7 @@ class PostController extends AControllerBase {
                 }
             }
         }
+
         return $errors;
     }
 
