@@ -84,24 +84,11 @@ class Post extends Model
     {
         $this->opening_hours = $opening_hours;
     }
-
-    /**
-     * Získanie adresy priradenej k príspevku
-     *
-     * @return Address|null
-     * @throws \Exception
-     */
     public function getAddressDetails(): ?Address
     {
         return $this->id_address ? Address::getOne($this->id_address) : null;
     }
 
-    /**
-     * Získanie všetkých obrázkov priradených k príspevku
-     *
-     * @return Image[]
-     * @throws \Exception
-     */
     public function getImagePath(): ?Image
     {
         // Ak existuje session s hlavnou fotkou, použije ju
@@ -167,11 +154,12 @@ class Post extends Model
     public function addImageToGallery(string $path): void
     {
         if (!$this->getId()) {
-            $this->save(); // Uloží príspevok, ak ešte nemá ID
+            $this->save();
         }
 
         $image = new Image();
         $image->setPath($path);
+
         $image->setPostId($this->getId());
         $image->save();
     }
