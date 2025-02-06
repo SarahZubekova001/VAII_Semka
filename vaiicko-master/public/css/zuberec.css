@@ -30,9 +30,8 @@ body {
 
 .zuberec {
     height: 470px;
-    background: url('/public/img/zuberec.jpg') no-repeat center center;
     background-size: contain;
-    background-color: #e3e3e3;
+    background: #e3e3e3 url('/public/img/zuberec.jpg') no-repeat center center;
 }
 
 .institution-box {
@@ -69,7 +68,6 @@ p {
     line-height: 1.6;
 }
 
-/* Responzívne úpravy */
 @media (max-width: 768px) {
     .hero h1 {
         font-size: 2rem;

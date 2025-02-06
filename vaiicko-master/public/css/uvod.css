@@ -62,26 +62,26 @@ body::before {
     background-color: #0056b3;
 }
 
-/* Mediálne dotazy pre menšie obrazovky */
+
 @media (max-width: 768px) {
     .content {
         padding: 10px;
-        justify-content: center; /* Zarovnanie všetkého do stredu */
+        justify-content: center;
         height: 100%;
     }
 
     .top-content h1 {
-        font-size: 24px; /* Menšie písmo pre nadpis */
+        font-size: 24px;
         line-height: 1.2;
     }
 
     .bottom-content p {
-        font-size: 14px; /* Menšie písmo pre text */
+        font-size: 14px;
         line-height: 1.4;
     }
 
     .cta a {
-        font-size: 16px; /* Menšie tlačidlo */
+        font-size: 16px;
         padding: 8px 16px;
     }
 }
