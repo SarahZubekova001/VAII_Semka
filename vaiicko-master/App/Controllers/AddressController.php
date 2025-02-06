@@ -5,17 +5,17 @@ namespace App\Controllers;
 use App\Core\AControllerBase;
 use App\Core\Responses\Response;
 use App\Models\Address;
+use Exception;
 
 class AddressController extends AControllerBase
 {
     public function index(): Response
     {
-        $address = Address::getAll();
-        return $this->html(['address' => $address]);
+        return $this->html(['address' => Address::getAll()]);
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function store(): Response
     {
@@ -24,16 +24,13 @@ class AddressController extends AControllerBase
         $postalCode = $this->request()->getValue('postal_code');
         $descriptiveNumber = $this->request()->getValue('descriptive_number');
 
-        if (empty($street) || empty($city) || empty($postalCode) || empty($descriptiveNumber)) {
-            throw new \Exception("All address fields are required: street, city, postal_code, descriptive_number.");
+        $data = [$street, $city, $postalCode, $descriptiveNumber];
+
+        if (in_array(null, array_map('trim', $data), true)) {
+            throw new Exception("All address fields are required.", 400);
         }
 
         $address = Address::findOrCreate($street, $city, (int)$postalCode, (int)$descriptiveNumber);
-
-        if (!$address) {
-            throw new \Exception("Address creation or retrieval failed.");
-        }
-
         return $this->html(['address' => $address]);
 
     }
